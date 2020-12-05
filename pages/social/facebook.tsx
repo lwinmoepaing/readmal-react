@@ -12,7 +12,7 @@ import { AuthReducerType } from '../../store/reducers/AuthReducer'
 import { State } from "../../store/configStore"
 import { API_URL } from '../../config'
 
-import { loginSuccess } from '../../store/actions/authAction'
+import { loginSuccess, logout } from '../../store/actions/authAction'
 import isPassAuth from '../../middleware/isPassAuth'
 
 interface FacebookSocialProps {
@@ -38,7 +38,7 @@ const FacebookPage = ({ title, token } : FacebookSocialProps) => {
       try {
         const headers = {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
+          Authorization: 'Bearer ' + token
         }
         const response = await fetch(`${API_URL}/auth/me`, { method: 'GET', headers })
         if (!response.ok) {
@@ -51,6 +51,7 @@ const FacebookPage = ({ title, token } : FacebookSocialProps) => {
           authInfo: resJson.data
         })
       } catch (e) {
+        await dispatch(logout())
         Router.push('/')
         return
       }
