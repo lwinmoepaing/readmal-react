@@ -1,4 +1,4 @@
-import { makeStyles, Zoom } from "@material-ui/core"
+import { makeStyles, Grow } from "@material-ui/core"
 import { contextType } from "../../../model/Context"
 
 interface MessageListType extends contextType{
@@ -25,11 +25,11 @@ const MessageList = (props: MessageListType) => {
     ].join(' ')
 
     return (
-        <Zoom in={true} style={{ transitionDelay: '500ms'}}>
+        <Grow  in={true}>
             <div className={classes.messageGroupWrapper}>
                 <div className={dynamicClass}>
                     <p className={dynamiceMessageClass}>
-                        { props?.message } by {props?.character?.name} 
+                        { props?.message }
                     </p>
                 </div>
 
@@ -38,15 +38,16 @@ const MessageList = (props: MessageListType) => {
                     <p className={dynamicCharacterClass} style={{color: props?.character?.color}}>{props?.character?.name} </p>
                 }
             </div>
-        </Zoom>    
+        </Grow >    
     )
 }
 
 const useStyle = makeStyles((theme) => ({
     messageGroupWrapper: {
-        margin: '0 .5rem'
+        margin: '0 .7rem'
     },
     messageWrapper: {
+        marginTop: '.3rem',
         marginBottom: '.2rem',
         width: '75%',
         display: 'flex',

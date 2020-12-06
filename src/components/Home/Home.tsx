@@ -7,14 +7,16 @@ import { contextType } from '../../../model/Context'
 import { Button } from "@material-ui/core"
 import { API_URL } from '../../../config'
 import MessageList from '../Message/MessageList'
+import TouchAppIcon from '@material-ui/icons/TouchApp';
 
 interface HomeProps {
   messages: contextType[] | null,
   onPress(),
-  isAuth: boolean
+  isAuth: boolean,
+  finishedStory: boolean
 }
 
-const Home = ({ messages, onPress, isAuth }: HomeProps) => {
+const Home = ({ messages, onPress, isAuth, finishedStory }: HomeProps) => {
   const classes = useStyles()
 
   const loginWithFacebook = useCallback( () => {
@@ -35,6 +37,11 @@ const Home = ({ messages, onPress, isAuth }: HomeProps) => {
                 )
               }
             </div>
+
+            {
+              !finishedStory &&
+              <TouchAppIcon className={`${classes.touchIcon} pulse`}/>
+            }
           </div>
         </Grid>
         <Grid item xs={12} sm={4} md={5}>
@@ -70,6 +77,14 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: 40,
     paddingLeft: 10,
     paddingRight: 10,
+  },
+  touchIcon: {
+    position: 'absolute',
+    padding: 6,
+    bottom: 25,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    fontSize: 45
   }
 }))
 

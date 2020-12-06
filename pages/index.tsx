@@ -29,9 +29,15 @@ const IndexPage = ({ title, isAuth } : HomeInitialProps) => {
 
   const increaseTouchMessage = useCallback(() => {
     if (touchMessages.length === messages.length) return
+
     setTouchMessages(prev => {
+      const currentCharId = messages[prev.length - 1]?.character?.id
+      const nextCharId = messages[prev.length]?.character?.id
+      let setMessage = prev
+      setMessage[prev.length - 1].is_show_character = currentCharId !== nextCharId
+      
       return [
-        ...prev,
+        ...setMessage,
         messages[prev.length]
       ]
     })
@@ -46,7 +52,12 @@ const IndexPage = ({ title, isAuth } : HomeInitialProps) => {
       <Container> 
         <h1> Readmal </h1>
         
-        <Home messages={touchMessages} onPress={increaseTouchMessage} isAuth={isAuth} />
+        <Home
+          messages={touchMessages}
+          onPress={increaseTouchMessage}
+          isAuth={isAuth}
+          finishedStory={messages.length === touchMessages.length}  
+        />
         
       </Container>
     </>

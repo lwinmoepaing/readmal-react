@@ -94,15 +94,17 @@ const makeContext = (
 export const makeSampleContexts = (): contextType[] => {
   
     const [MgMg, AgAg, MiNi] = [
-        new Character(makeCharacter('1', 'Mg Mg', '#405caa')),
-        new Character(makeCharacter('2', 'Aung Aung', '#265856')),
-        new Character(makeCharacter('3', 'Mi ni', '#ffff1e')),
+        new Character(makeCharacter('1', 'မောင်မောင်', '#405caa')),
+        new Character(makeCharacter('2', 'အောင်ကောင်း', '#265856')),
+        new Character(makeCharacter('3', 'မိနီ', '#ffff1e')),
     ]
 
     const contextMessages = [
-        new Context(makeContext(null, 'Hello everyone', MgMg)),
-        new Context(makeContext(null, 'Hello morning', MiNi, 'RIGHT')),
-        new Context(makeContext(null, 'Hello Ahaha', AgAg)),
+        new Context(makeContext(null, 'သာကြီးတို့နေကောင်းကြလား', MgMg)),
+        new Context(makeContext(null, 'နင်တို့ကလည်းဟာ အဲ့လောက်ကြာနေကြတာလား', MiNi, 'RIGHT')),
+        new Context(makeContext(null, 'ဘာလား မိနီ', AgAg)),
+        new Context(makeContext(null, 'နင် မိတ်ကပ်ပြင်ရင် ဒီထက်တောင်ကြာသေးတယ်', AgAg)),
+        new Context(makeContext(null, 'ဟုတ်တယ် ဒီလောက်လေးတော့ စောင့်သင့်ပါတယ်ဟာ', MgMg)),
     ]
 
     return contextMessages
