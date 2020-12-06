@@ -41,7 +41,7 @@ const Me = ({ title, Auth }: MeType) => {
                 <meta property="og:title" content={title} key={title} />
             </Head>
             <Container>
-                    
+                <h1> User </h1>
                 <Typography component="p">
                     Name: { user?.authInfo?.name }
                 </Typography>
@@ -51,12 +51,17 @@ const Me = ({ title, Auth }: MeType) => {
                 <Typography component="p">
                     Email: { user?.authInfo?.email }
                 </Typography>
-                <Button variant="contained" color="primary" onClick={toLogout}>
-                Logout
-                </Button>
-                <Link href="/" passHref>
-                    <Button variant="outlined" color="primary" >Home</Button>
-                </Link> 
+
+                <div style={{marginTop: '1rem'}}>
+                    <Button variant="contained" color="primary" onClick={toLogout}>
+                        Logout
+                    </Button>
+
+                    <Link href="/" passHref >
+                        <Button variant="outlined" color="primary" >Home</Button>
+                    </Link> 
+                </div>
+
                 
             </Container>
         </>
