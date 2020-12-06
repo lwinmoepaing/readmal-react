@@ -8,6 +8,7 @@ import { parse } from 'cookie'
 import Router from 'next/router'
 
 import { loginSuccess } from '../store/actions/authAction' 
+import { NextPageContext } from 'next'
 
 export interface ValidAuthType {
   authInfo: any | null,
@@ -15,7 +16,7 @@ export interface ValidAuthType {
   isValid: boolean,
 }
 
-const isPassAuth = (ctx: any, isRedirect: boolean = true): ValidAuthType => {
+const isPassAuth = (ctx: NextPageContext, isRedirect: boolean = true): ValidAuthType => {
 
   let token = null
   let authInfo = null
@@ -47,7 +48,8 @@ const isPassAuth = (ctx: any, isRedirect: boolean = true): ValidAuthType => {
     }
     return resData
   }
-
+  // console.log(ctx.store)
+  // console.log(ctx.store.getState())
   ctx.store.dispatch(loginSuccess({ token, authInfo }))
   return resData
 }

@@ -1,21 +1,33 @@
-import { useCallback } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { NextPageContext } from 'next'
 import Head from 'next/head'
 import Router from 'next/router'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector, connect } from 'react-redux'
 // Material Ui
-import { Button } from '@material-ui/core'
+import { Button, Container, Typography } from '@material-ui/core'
 
 import isPassAuth from '../middleware/isPassAuth'
 import { logout } from '../store/actions/authAction'
+import { AuthReducerType } from '../store/reducers/AuthReducer'
+import { State } from '../store/configStore'
+import Link from 'next/link'
 
 interface MeType {
-    title: string
+    title: string,
+    Auth: AuthReducerType
 }
 
-const Me = ({ title, isAuth }: MeType) => {
+const Me = ({ title, Auth }: MeType) => {
     const dispatch = useDispatch()
+
+    const userData = useSelector((state: State) => state?.Auth)
+
+    const [user, setUser] = useState<AuthReducerType | null>(Auth ?? null)
+
+    useEffect(() => {
+        setUser(userData)
+    }, [userData])
 
     const toLogout = useCallback( async () => {
         await dispatch(logout())
@@ -24,26 +36,39 @@ const Me = ({ title, isAuth }: MeType) => {
 
     return (
         <>
-         <Head>
-            <title>{title}</title>
-            <meta property="og:title" content={title} key={title} />
-        </Head>
-        <div>
-            <p> Is Me </p>
-            <Button variant="contained" color="primary" onClick={toLogout}>
-               Logout
-            </Button>
-        </div>
+            <Head>
+                <title>{title}</title>
+                <meta property="og:title" content={title} key={title} />
+            </Head>
+            <Container>
+                    
+                <Typography component="p">
+                    Name: { user?.authInfo?.name }
+                </Typography>
+                <Typography component="p">
+                    Role: { user?.authInfo?.role?.toLowerCase() }
+                </Typography>
+                <Typography component="p">
+                    Email: { user?.authInfo?.email }
+                </Typography>
+                <Button variant="contained" color="primary" onClick={toLogout}>
+                Logout
+                </Button>
+                <Link href="/" passHref>
+                    <Button variant="outlined" color="primary" >Home</Button>
+                </Link> 
+                
+            </Container>
         </>
     )
 }
 
-Me.getInitialProps = (context: NextPageContext) => {
-    const isPass = isPassAuth(context)
-    console.log(isPass)
-
+Me.getInitialProps = async (context: NextPageContext) => {
+    const isPass = await isPassAuth(context)
+    const { Auth } = context.store.getState()
     return  {
         title: 'Readmal | User ' + isPass?.authInfo?.name,
+        Auth: Auth
     }
 }
 

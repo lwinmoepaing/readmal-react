@@ -1,16 +1,18 @@
 import {
   LOGIN_FAIL, LOGIN_SENDING, LOGIN_SUCCESS, LOGOUT,
 } from '../actions/actionTypes'
+import Cookies from 'js-cookie'
 
 const isClientSide = typeof window !== 'undefined'
 
 let authInfo = null
 let token = null
 
-// if (isClientSide) {
-//   authInfo = Cookies.get('authInfo')
-//   token = Cookies.get('token')
-// }
+if (isClientSide) {
+  authInfo = Cookies.get('authInfo')
+  token = Cookies.get('token')
+}
+
 
 export interface AuthReducerType {
   isLoading: boolean,

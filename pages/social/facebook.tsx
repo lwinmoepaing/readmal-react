@@ -31,7 +31,7 @@ const FacebookPage = ({ title, token } : FacebookSocialProps) => {
   const authData: AuthReducerType = useSelector((state: State) => state.Auth)
   const dispatch = useDispatch(); 
 
-  const [ userData, setUserData] = useState<AuthTypes | undefined>()
+  const [userData, setUserData] = useState<AuthTypes | undefined>()
 
   const login = useCallback(
     async () => {
@@ -94,7 +94,6 @@ const FacebookPage = ({ title, token } : FacebookSocialProps) => {
 
 FacebookPage.getInitialProps = async ( context: NextPageContext) => {
   const result = isPassAuth(context, false)
-  console.log('Result', result);
   // make sure to get token when call back  
   // appurl.com/social/facebook?token={token}
   return  {

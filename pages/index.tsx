@@ -8,7 +8,6 @@ import Router from "next/router"
 import { Container, Button } from "@material-ui/core"
 
 // Redux
-import { connect } from 'react-redux'
 import { API_URL } from "../config"
 import isPassAuth from "../middleware/isPassAuth"
 
@@ -34,9 +33,9 @@ const Home = ({ title, isAuth } : HomeInitialPops) => {
        
         {
           isAuth ?
-            <Link href="/me">
-              Me
-            </Link> : 
+            <Link href="/me" passHref>
+              <Button variant="outlined" color="primary" >Me</Button>
+            </Link> :
             <Button variant="contained" color="primary" onClick={loginWithFacebook}>
               Login With Facebook
             </Button>
