@@ -18,7 +18,7 @@ interface MeType {
     Auth: AuthReducerType
 }
 
-const Me = ({ title, Auth }: MeType) => {
+const MePage = ({ title, Auth }: MeType) => {
     const dispatch = useDispatch()
 
     const userData = useSelector((state: State) => state?.Auth)
@@ -61,14 +61,12 @@ const Me = ({ title, Auth }: MeType) => {
                         <Button variant="outlined" color="primary" >Home</Button>
                     </Link> 
                 </div>
-
-                
             </Container>
         </>
     )
 }
 
-Me.getInitialProps = async (context: NextPageContext) => {
+MePage.getInitialProps = async (context: NextPageContext) => {
     const isPass = await isPassAuth(context)
     const { Auth } = context.store.getState()
     return  {
@@ -77,4 +75,4 @@ Me.getInitialProps = async (context: NextPageContext) => {
     }
 }
 
-export default Me
+export default MePage

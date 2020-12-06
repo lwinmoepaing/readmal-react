@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { NextPageContext } from "next"
 import Link from 'next/link'
 import Head from 'next/head'
@@ -10,16 +10,23 @@ import { Container, Button } from "@material-ui/core"
 // Redux
 import { API_URL } from "../config"
 import isPassAuth from "../middleware/isPassAuth"
+import Home from "../src/components/Home/Home"
+import { contextType, makeSampleContexts } from "../model/Context"
 
 interface HomeInitialPops {
   title: string,
   isAuth: boolean
 }
 
-const Home = ({ title, isAuth } : HomeInitialPops) => {
+const IndexPage = ({ title, isAuth } : HomeInitialPops) => {
+  const [messages] = useState<contextType[]>(makeSampleContexts())
 
   const loginWithFacebook = useCallback( () => {
     Router.push(`${API_URL}/auth/social/facebook`)
+  }, [])
+
+  useEffect(() => {
+    console.log('Messages', messages)
   }, [])
 
   return (
@@ -40,14 +47,13 @@ const Home = ({ title, isAuth } : HomeInitialPops) => {
               Login With Facebook
             </Button>
         }
-
-    
+        <Home />
       </Container>
     </>
   )
 }
 
-Home.getInitialProps = async ( context: NextPageContext) => {
+IndexPage.getInitialProps = async ( context: NextPageContext) => {
   const isPass = isPassAuth(context, false)
 
   return  {
@@ -56,4 +62,4 @@ Home.getInitialProps = async ( context: NextPageContext) => {
   }
 }
 
-export default Home  
+export default IndexPage  
