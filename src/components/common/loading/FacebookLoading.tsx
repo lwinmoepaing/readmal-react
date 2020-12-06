@@ -10,15 +10,15 @@ const FacebookLoading = () => {
     const classes = useStyles()
 
     return (
-        <Card className={classes.cardRoot}>
-          <LinearProgress />
-          <CardContent className={classes.cardContent}>
-            <FacebookIcon className={classes.loadingIcon}  fontSize="large"/>
-            <Typography variant="body2" component="p">
-               Loading ...
-            </Typography>
-          </CardContent>
-        </Card>
+      <Card className={classes.cardRoot}>
+        <LinearProgress />
+        <CardContent className={classes.cardContent}>
+          <FacebookIcon className={classes.loadingIcon}  fontSize="large"/>
+          <Typography variant="body2" component="p">
+              Loading ...
+          </Typography>
+        </CardContent>
+      </Card>
     )
 }
 

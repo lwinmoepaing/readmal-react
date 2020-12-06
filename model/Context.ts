@@ -1,29 +1,20 @@
+import shortUUID from 'short-uuid'
+
 export interface characterType {
 	id: string,
 	name: string,
 	color: string
 }
 
-// enum ContextDirection {
-//     CENTER = "CENTER",
-//     LEFT = "LEFT",
-//     RIGHT = "RIGHT",
-// }
-
-// enum ContextMessageType {
-//     AUDIO = 'AUDIO', 
-//     MESSAGE = 'MESSAGE', 
-//     THINKING_MESSAGE = 'THINKING_MESSAGE', 
-//     IMAGE = 'IMAGE'
-// }
-
 export interface contextType {
+    id: string,
 	type: string,
 	message: string,
-	context_position: string,
+	context_position: "left" | "center" | "right",
 	context_url: string,
 	is_theme_change: boolean,
-	is_theme_change_url: string,
+    is_theme_change_url: string,
+    is_show_character: boolean,
 	character: characterType
 }
 
@@ -40,18 +31,23 @@ export class Character implements characterType {
 }
 
 export class Context implements contextType {
+    id: string
     type: string
     message: string
-    context_position: string
+    context_position: "left" | "center" | "right"
     context_url: string
     is_theme_change: boolean
     is_theme_change_url: string
     character: characterType
-    
+
+    // Custom Type 
+    // It is not access from server side data
+    is_show_character: boolean = true
+
     constructor({
         type = 'MESSAGE',
         message = '',
-        context_position = 'LEFT',
+        context_position = 'left',
         context_url = '',
         is_theme_change = false,
         is_theme_change_url = '',
@@ -66,40 +62,47 @@ export class Context implements contextType {
         this.character = character
     }
 }
-const makeCharacter = (id: string, name: string, color: string): characterType => ({ id, name, color})
+
+const makeCharacter = (id: string, name: string, color: string): characterType => ({ id, name, color })
 
 const makeContext = (
+    id: string ,
     message: string,
     character: characterType,
-    context_position: string = 'LEFT',
+    context_position: string = 'left',
     type: string = 'MESSAGE',
     context_url: string = '',
     is_theme_change: boolean = false,
     is_theme_change_url: string = '',
-): contextType => {
+    is_show_character: boolean = true
+): any  => {
+    id = id || shortUUID().new();
+
     return {
+        id,
         type,
         message,
-        context_position,
+        context_position: context_position?.toLowerCase(),
         context_url,
         is_theme_change,
         is_theme_change_url,
         character,
+        is_show_character
     }
 }
 
 export const makeSampleContexts = (): contextType[] => {
   
     const [MgMg, AgAg, MiNi] = [
-        new Character(makeCharacter('1', 'Mg Mg', 'red')),
-        new Character(makeCharacter('2', 'Aung Aung', 'red')),
-        new Character(makeCharacter('3', 'Mi ni', 'red')),
+        new Character(makeCharacter('1', 'Mg Mg', '#405caa')),
+        new Character(makeCharacter('2', 'Aung Aung', '#265856')),
+        new Character(makeCharacter('3', 'Mi ni', '#ffff1e')),
     ]
 
     const contextMessages = [
-        new Context(makeContext('Hello', MgMg)),
-        new Context(makeContext('Hello', MiNi, 'RIGHT')),
-        new Context(makeContext('Hello', AgAg)),
+        new Context(makeContext(null, 'Hello everyone', MgMg)),
+        new Context(makeContext(null, 'Hello morning', MiNi, 'RIGHT')),
+        new Context(makeContext(null, 'Hello Ahaha', AgAg)),
     ]
 
     return contextMessages

@@ -1,33 +1,41 @@
 import { useCallback, useEffect, useState } from "react"
 import { NextPageContext } from "next"
-import Link from 'next/link'
 import Head from 'next/head'
-import Router from "next/router"
 
 // Material
 import { Container, Button } from "@material-ui/core"
 
 // Redux
-import { API_URL } from "../config"
 import isPassAuth from "../middleware/isPassAuth"
 import Home from "../src/components/Home/Home"
 import { contextType, makeSampleContexts } from "../model/Context"
 
-interface HomeInitialPops {
+interface HomeInitialProps {
   title: string,
   isAuth: boolean
 }
 
-const IndexPage = ({ title, isAuth } : HomeInitialPops) => {
-  const [messages] = useState<contextType[]>(makeSampleContexts())
-
-  const loginWithFacebook = useCallback( () => {
-    Router.push(`${API_URL}/auth/social/facebook`)
-  }, [])
+const IndexPage = ({ title, isAuth } : HomeInitialProps) => {
+  const [messages] = useState<contextType[] | null >(makeSampleContexts() || null)
+  const [touchMessages, setTouchMessages] = useState<contextType[] | null >([])
 
   useEffect(() => {
-    console.log('Messages', messages)
-  }, [])
+    if (messages.length) {
+      setTouchMessages([
+        messages[0]
+      ])
+    }
+  }, [messages])
+
+  const increaseTouchMessage = useCallback(() => {
+    if (touchMessages.length === messages.length) return
+    setTouchMessages(prev => {
+      return [
+        ...prev,
+        messages[prev.length]
+      ]
+    })
+  }, [messages, touchMessages])
 
   return (
     <>
@@ -37,17 +45,9 @@ const IndexPage = ({ title, isAuth } : HomeInitialPops) => {
       </Head>
       <Container> 
         <h1> Readmal </h1>
-       
-        {
-          isAuth ?
-            <Link href="/me" passHref>
-              <Button variant="outlined" color="primary" >Me</Button>
-            </Link> :
-            <Button variant="contained" color="primary" onClick={loginWithFacebook}>
-              Login With Facebook
-            </Button>
-        }
-        <Home />
+        
+        <Home messages={touchMessages} onPress={increaseTouchMessage} isAuth={isAuth} />
+        
       </Container>
     </>
   )
