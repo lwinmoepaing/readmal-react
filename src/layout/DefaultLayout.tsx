@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -14,6 +13,7 @@ import { childrenProps } from '../../config';
 import { AuthReducerType } from '../../store/reducers/AuthReducer';
 import drawerHook from '../hooks/drawerHook';
 import SideBar from '../components/SideBar/SideBar';
+import Avatar from '@material-ui/core/Avatar';
 
 const drawerWidth = 240;
 
@@ -67,7 +67,10 @@ export default function DefaultLayout({ children, Auth, title = 'ReadMal' }: Def
         }}
       >
         <div className={classes.drawerHeader}>
-          <span> Readmal </span>
+          <Avatar alt={Auth?.authInfo?.name} src={Auth?.authInfo?.image} className={classes.avatar}/>
+          <Typography variant="body2" noWrap>
+            {Auth?.authInfo?.name ?? title}
+          </Typography>
           <IconButton onClick={toggleDrawer}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
@@ -127,7 +130,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 1),
       // necessary for content to be below app bar
       ...theme.mixins.toolbar,
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
     },
     content: {
       flexGrow: 1,
@@ -145,5 +148,11 @@ const useStyles = makeStyles((theme: Theme) =>
       }),
       marginLeft: 0,
     },
+    // Avatar
+    avatar: {
+      backgroundColor: '#dfdfdf',
+      width: theme.spacing(4),
+      height: theme.spacing(4),
+    }
   }),
 );
