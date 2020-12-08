@@ -6,7 +6,7 @@ import Head from 'next/head'
 import { Container, Button } from "@material-ui/core"
 
 // Redux
-import isPassAuth from "../middleware/isPassAuth"
+import AuthenticateMiddleware from "../middleware/isAuthenticate"
 import Home from "../src/components/Home/Home"
 import { contextType, makeSampleContexts } from "../model/Context"
 
@@ -65,7 +65,7 @@ const IndexPage = ({ title, isAuth } : HomeInitialProps) => {
 }
 
 IndexPage.getInitialProps = async ( context: NextPageContext) => {
-  const isPass = isPassAuth(context, false)
+  const isPass = AuthenticateMiddleware(context, false, true)
 
   return  {
     title: 'Readmal | Touch Story Platform',

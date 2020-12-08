@@ -16,7 +16,12 @@ export interface ValidAuthType {
   isValid: boolean,
 }
 
-const isPassAuth = (ctx: NextPageContext, isRedirect: boolean = true): ValidAuthType => {
+const isAuthenticate = (
+  ctx: NextPageContext, 
+  isRedirect: boolean = true, // thisRedirect mean if not auth redirect to homepage
+  isAuthRedirect: boolean = false, // mean role is admin Redirect '/admin' if author '/author'
+  redirectUrl = '/' // thisRedirectUrl is homepage if not auth
+): ValidAuthType => {
 
   let token = null
   let authInfo = null
@@ -39,7 +44,6 @@ const isPassAuth = (ctx: NextPageContext, isRedirect: boolean = true): ValidAuth
   }
 
   if (!isValid && isRedirect) {
-    const redirectUrl = '/'
     if (!ctx.req) {
       Router.push(redirectUrl)
     } else {
@@ -48,10 +52,21 @@ const isPassAuth = (ctx: NextPageContext, isRedirect: boolean = true): ValidAuth
     }
     return resData
   }
-  // console.log(ctx.store)
-  // console.log(ctx.store.getState())
+
   ctx.store.dispatch(loginSuccess({ token, authInfo }))
+
+  // Is Auth Redirect Mean Role Redirect
+  if (isValid && isAuthRedirect) {
+    const roleUrl = `/${authInfo?.role?.toLowerCase()}`
+    if (!ctx.req) {
+      Router.push(roleUrl);
+    } else {
+      ctx.res.writeHead(302, { Location: roleUrl });
+      ctx.res.end();
+    }
+  }
+
   return resData
 }
 
-export default isPassAuth
+export default isAuthenticate

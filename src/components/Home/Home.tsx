@@ -26,6 +26,8 @@ const Home = ({ messages, onPress, isAuth, finishedStory }: HomeProps) => {
   return (
     <div className={classes.root} >
       <Grid container spacing={3}>
+
+        {/* First Section Left Grid */}
         <Grid item xs={12} sm={9} md={7}>
           <div className="iphone-x" onClick={onPress}>
             <i>Speaker</i>
@@ -44,6 +46,9 @@ const Home = ({ messages, onPress, isAuth, finishedStory }: HomeProps) => {
             }
           </div>
         </Grid>
+        {/* First Section Left Grid Finished */}
+
+        {/* Second Section Left Grid */}
         <Grid item xs={12} sm={4} md={5}>
           {
             isAuth ?
@@ -53,9 +58,9 @@ const Home = ({ messages, onPress, isAuth, finishedStory }: HomeProps) => {
               <Button variant="contained" color="primary" onClick={loginWithFacebook}>
                 Login With Facebook
               </Button>
-            
           }
         </Grid>
+        {/* Second Section Left Grid Finished */}
       </Grid>
     </div>
   )

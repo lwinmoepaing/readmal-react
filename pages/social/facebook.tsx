@@ -13,7 +13,7 @@ import { State } from "../../store/configStore"
 import { API_URL } from '../../config'
 
 import { loginSuccess, logout } from '../../store/actions/authAction'
-import isPassAuth from '../../middleware/isPassAuth'
+import AuthenticateMiddleware from '../../middleware/isAuthenticate'
 
 interface FacebookSocialProps {
   title: string,
@@ -67,7 +67,6 @@ const FacebookPage = ({ title, token } : FacebookSocialProps) => {
 
   // when userData change dependency, we need to dispatch LoginSuccess
   useEffect( () => {
-    console.log('Calling coz of userData changes')
     if (userData?.authInfo) {
       dispatch(loginSuccess({
         token,
@@ -75,7 +74,7 @@ const FacebookPage = ({ title, token } : FacebookSocialProps) => {
       }))
 
       // If success Login, we redirect me
-      Router.push('/me')
+      Router.push('/')
     }
   }, [userData])
 
@@ -93,7 +92,7 @@ const FacebookPage = ({ title, token } : FacebookSocialProps) => {
 }
 
 FacebookPage.getInitialProps = async ( context: NextPageContext) => {
-  const result = isPassAuth(context, false)
+  const result = AuthenticateMiddleware(context, false)
   // make sure to get token when call back  
   // appurl.com/social/facebook?token={token}
   return  {
