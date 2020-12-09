@@ -3,21 +3,22 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import SideBarItem from './SideBarItem'
 import { useDispatch } from 'react-redux';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Router from 'next/router'
 import { logout } from '../../../store/actions/authAction';
 import { makeStyles } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon'
 import { AuthReducerType } from '../../../store/reducers/AuthReducer'
+import { SideBarType, getSideBar } from '../../../config/index'
+import profileHook from '../../hooks/profileHook';
 
 interface SideBarProps {
     Auth?: AuthReducerType
 }
 
-const SideBar = ( { Auth } : SideBarProps) : JSX.Element => {
+const SideBar = ({ Auth }: SideBarProps ) : JSX.Element => {
     const classes = useStyle()
 
     const dispatch = useDispatch()
@@ -27,14 +28,17 @@ const SideBar = ( { Auth } : SideBarProps) : JSX.Element => {
         Router.push('/')
     }, [])
 
+    const [sideBars, setSideBar] = useState<SideBarType[]>(getSideBar(Auth?.authInfo?.role))
+
+    useEffect(() => {
+        setSideBar(getSideBar(Auth?.authInfo?.role))
+    }, [Auth])
+
     return (
         <>
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
+                {sideBars.map((sideBar, index) => (
+                    <SideBarItem {...sideBar} key={`${sideBar?.name}_${sideBar?.url}`} />
                 ))}
             </List>
             <Divider />

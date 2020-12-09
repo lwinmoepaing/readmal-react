@@ -76,7 +76,7 @@ export default function DefaultLayout({ children, Auth, title = 'ReadMal' }: Def
           </IconButton>
         </div>
         <Divider />
-        <SideBar />
+        <SideBar Auth={Auth} />
 
       </Drawer>
       {/* Left Side Drawer Finished */}

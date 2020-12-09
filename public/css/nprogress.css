@@ -7,7 +7,7 @@
     background: #1890ff;
       border-radius: 3px;
     position: fixed;
-    z-index: 1031;
+    z-index: 10000;
     top: 0;
     left: 0;
   

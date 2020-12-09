@@ -8,11 +8,11 @@ import Nprogress from 'nprogress'
 
 // Redux 
 import { wrapper } from '../store/configStore'
-import { Provider } from 'react-redux'
 
 // Material Ui 
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import "react-multi-carousel/lib/styles.css";
 import theme from './theme'; 
 
 Router.onRouteChangeStart = () => Nprogress.start()

@@ -56,6 +56,7 @@ const isAuthenticate = (
   ctx.store.dispatch(loginSuccess({ token, authInfo }))
 
   // Is Auth Redirect Mean Role Redirect
+  // Specific HomePage, Initial About Page,
   if (isValid && isAuthRedirect) {
     const roleUrl = `/${authInfo?.role?.toLowerCase()}`
     if (!ctx.req) {
