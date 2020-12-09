@@ -14,6 +14,7 @@ import { AuthReducerType } from '../../store/reducers/AuthReducer';
 import drawerHook from '../hooks/drawerHook';
 import SideBar from '../components/SideBar/SideBar';
 import Avatar from '@material-ui/core/Avatar';
+import { Container } from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -86,7 +87,9 @@ export default function DefaultLayout({ children, Auth, title = 'ReadMal' }: Def
         })}
       >
         <div className={classes.drawerHeader} />
-        { children }
+        <Container>
+          { children }
+        </Container>
       </main>
     </div>
   );

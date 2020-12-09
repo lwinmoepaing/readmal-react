@@ -1,20 +1,14 @@
 import { useCallback, useState, useEffect } from 'react'
 import { NextPageContext } from 'next'
 import Head from 'next/head'
-import Router from 'next/router'
-
-import { useDispatch } from 'react-redux'
-// Material Ui
-import { Button, CircularProgress } from '@material-ui/core'
 
 import AuthenticateMiddleware from '../../middleware/isAuthenticate'
-import { logout } from '../../store/actions/authAction'
 import { AuthReducerType } from '../../store/reducers/AuthReducer'
-import Profile from '../../src/components/Profile/Profile'
 import DefaultLayout from '../../src/layout/DefaultLayout'
 import profileHook from '../../src/hooks/profileHook'
 import storyHook from '../../src/hooks/storyHook'
 import StoryCardSwiper from '../../src/components/Story/StoryCardSwiper'
+import StoryFormDialog from '../../src/components/Story/StoryFormDialog'
 
 interface MeType {
     title: string,
@@ -22,14 +16,7 @@ interface MeType {
 }
 
 const AuthorIndexPage = ({ title, Auth }: MeType) => {
-    const dispatch = useDispatch()
-
     const user = profileHook(Auth)
-
-    const toLogout = useCallback( async () => {
-        await dispatch(logout())
-        Router.push('/')
-    }, [])
 
     const {
         stories, 
@@ -58,22 +45,16 @@ const AuthorIndexPage = ({ title, Auth }: MeType) => {
             </Head>
 
             <DefaultLayout Auth={user}>
-                <Profile user={user} />
 
-                <StoryCardSwiper />
-                
-                {
-                    storiesMeta?.hasNextPage &&
-                    <div>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={fetchStories} disabled={storyLoading}
-                        >
-                            Load Stories {storyLoading && <CircularProgress size={22} />}
-                        </Button>
-                    </div>
-                }
+                <StoryCardSwiper
+                    stories={stories}
+                    storyLoading={storyLoading}
+                    loadStory={fetchStories}
+                    hasNextPage={storiesMeta?.hasNextPage}
+                >
+                    <StoryFormDialog />
+                </StoryCardSwiper>
+
             </DefaultLayout>
         </>
     )

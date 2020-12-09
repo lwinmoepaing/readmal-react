@@ -51,15 +51,9 @@ const storyHook = ({token}: StoryHookProps): StoryHookReturnType => {
                 throw new Error(message)
             }
 
-            await new Promise((resolve: (arg0: boolean) => void) => {
-                setTimeout(() => {
-                    resolve(true);
-                }, 3000);
-            })
-
             const res = await response.json()
 
-            setStories(page === 1 ? res?.data : [...stories, res?.data])
+            setStories(page === 1 ? res?.data : [...stories, ...res?.data])
             setStoriesMeta(res?.meta)
             setStoriesPage(res?.meta?.currentPage + 1)
 
