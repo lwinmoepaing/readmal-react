@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     paddingLeft: theme.spacing(1),
     paddingBottom: theme.spacing(1),
+  },
+  title: {
+    minWidth: 150
   }
 }))
 
@@ -55,7 +58,7 @@ export default function StoryCardSwiperItem({ title, description, image, isLoadC
             <Card className={classes.root}>
                 <div className={classes.details}>
                     <CardContent className={classes.content}>
-                    <Typography component="h6" variant="h6">
+                    <Typography component="h6" variant="h6" className={classes?.title}>
                         { title }
                     </Typography>
                     <Typography variant="subtitle1" color="textSecondary">

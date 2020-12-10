@@ -1,10 +1,10 @@
-import React, { useRef } from 'react'
+import React, { useRef, useCallback } from 'react'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import { AddCircleOutline, CloseOutlined } from '@material-ui/icons'
 import TextField from '@material-ui/core/TextField';
-import { FormControl,  makeStyles, MenuItem, Slide, AppBar, Toolbar, IconButton, Typography, Card, CardContent, CardMedia, CircularProgress } from '@material-ui/core'
+import { FormControl,  makeStyles, MenuItem, Slide, AppBar, Toolbar, IconButton, Typography, Card, CardContent, CardMedia, CircularProgress, LinearProgress } from '@material-ui/core'
 import { TransitionProps } from '@material-ui/core/transitions';
 import { CATEGORY_LIST } from '../../../config'
 import { StoryFormHook } from '../../hooks/storyFormHook'
@@ -20,13 +20,15 @@ interface StoryFormDialogProps {
   dialogTitle?: string
   isShowCreateButton?: boolean,
   storyFormHook: StoryFormHook
+  onCreateStorySuccess ?: (data: any) => void
 }
 
 export default function StoryFormDialog(
   { 
     dialogTitle = 'Story အသစ်ထည့်မည်',
     isShowCreateButton = false,
-    storyFormHook
+    storyFormHook,
+    onCreateStorySuccess
   } : StoryFormDialogProps
 ): JSX.Element {
   const classes = useStyle()
@@ -44,6 +46,7 @@ export default function StoryFormDialog(
     // resetFormData,
 
     // Data
+    storyFormLoading,
     formData: data,
     imageUploadLoading
   } = storyFormHook
@@ -61,6 +64,13 @@ export default function StoryFormDialog(
       imageFormRef.current.value = null
     }
   }
+
+  const saveNewStory = useCallback( async () => {
+    const resData = await onCreateStory()
+    if (resData && onCreateStorySuccess) {
+      onCreateStorySuccess(resData)
+    }
+  },[data])
 
   return (
     <>
@@ -87,13 +97,15 @@ export default function StoryFormDialog(
             <Typography variant="h6" className={classes.title}>
               { dialogTitle }
             </Typography>
-            <Button autoFocus color="inherit" onClick={onCreateStory}>
-              save
+            <Button autoFocus variant="text" color="inherit" onClick={saveNewStory} disabled={storyFormLoading}>
+              Save
+              { storyFormLoading && <CircularProgress size={22} color="secondary" className={classes.circleLoaded}/>}
             </Button>
           </Toolbar>
         </AppBar>
         <DialogContent>
           <Card className={classes.dialogContent}>
+            { storyFormLoading && <LinearProgress />}
             <CardContent>
             <FormControl size="small" fullWidth={true}>
               <TextField
@@ -105,6 +117,7 @@ export default function StoryFormDialog(
                 name="title"
                 value={data.title}
                 onChange={handleChanges}
+                disabled={storyFormLoading}
               />
             </FormControl>
             <FormControl fullWidth={true}>
@@ -117,6 +130,7 @@ export default function StoryFormDialog(
                 value={data.description}
                 name="description"
                 onChange={handleChanges}
+                disabled={storyFormLoading}
               />
             </FormControl>
             <FormControl fullWidth={true}>
@@ -130,6 +144,7 @@ export default function StoryFormDialog(
                 value={data.category}
                 name="category"
                 onChange={handleChanges}
+                disabled={storyFormLoading}
               >
                 { CATEGORY_LIST?.map(cat => ( <MenuItem key={cat.value} value={cat.value}>{cat.title}</MenuItem>)) }
               </TextField>
@@ -162,7 +177,7 @@ export default function StoryFormDialog(
               title="Paella dish"
             />
             
-            <FormControl fullWidth={true}>
+            {/* <FormControl fullWidth={true}>
               <TextField
                 label="Image"
                 variant="outlined"
@@ -171,7 +186,7 @@ export default function StoryFormDialog(
                 size="small"
                 value={data.image}
               />
-            </FormControl>
+            </FormControl> */}
             {/* <FormControl fullWidth={true}>
               <TextField
                 label="Addable Episode Count"
@@ -182,6 +197,7 @@ export default function StoryFormDialog(
                 size="small"
                 name="addable_episode_count"
                 onChange={handleChanges}
+                disabled={storyFormLoading}
               />
             </FormControl> */}
             </CardContent>

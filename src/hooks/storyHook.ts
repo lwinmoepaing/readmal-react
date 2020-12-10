@@ -10,7 +10,7 @@ interface StoryHookReturnType {
     storyLoading: boolean
     // setStoryLoading: Dispatch<SetStateAction<boolean>>
 
-    stories: any
+    stories: any[]
     storiesPage: number
     storiesMeta: MetaDataType | null
 
@@ -21,6 +21,7 @@ interface StoryHookReturnType {
     // All Methods
     getStoryListByAuthor(author_id: string, page: number) : void
     getStoryById(story_id: string): void
+    prependStory(any): void
 }
 
 const storyHook = ({token}: StoryHookProps): StoryHookReturnType => {
@@ -95,6 +96,14 @@ const storyHook = ({token}: StoryHookProps): StoryHookReturnType => {
         }
     }
 
+    // When you create new story, sort initial story
+    const prependStory = (story: any) => {
+        setStories((prev) => ([
+            story,
+            ...prev
+        ]))
+    }
+
     return {
         stories,
         storyLoading,
@@ -106,7 +115,8 @@ const storyHook = ({token}: StoryHookProps): StoryHookReturnType => {
 
         // All Methoeds
         getStoryListByAuthor,
-        getStoryById
+        getStoryById,
+        prependStory
     }
 }
 

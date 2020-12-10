@@ -35,6 +35,7 @@ export default function errorHandleHook (): any[] {
     const handleResponseError = async (response: ErrorReponsse) => {
         const statusCode = response.status
         const res = await response.json<ErrorCatch>()
+        console.log('Change Error Json', res)
         
         switch(statusCode) {
           case NOT_AUTHENTICATE: 
@@ -42,7 +43,7 @@ export default function errorHandleHook (): any[] {
             dispatch( logout() )
             return
           case BAD_REQUEST: 
-            handleErrorMessage(res)
+            handleErrorMessage(res, true)
             return
           default: 
             dispatch(
@@ -51,13 +52,13 @@ export default function errorHandleHook (): any[] {
         }
     }
 
-    const handleErrorMessage = (error: ErrorCatch) => {
+    const handleErrorMessage = (error: ErrorCatch, isBadRequest?: boolean) => {
       let messages: snackMessage[] = []
       messages.push(makeErroMessate(error.message))
 
       if (error?.data && isArray(error?.data)) {
         error?.data?.map(errMessage => {
-          messages.push(makeErroMessate(errMessage))
+          messages.push(makeErroMessate(isBadRequest ? errMessage.message : errMessage))
         })
       }
 

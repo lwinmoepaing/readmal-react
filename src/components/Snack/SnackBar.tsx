@@ -18,7 +18,7 @@ function MyApp() {
     snack.messages.map(mes => {
       enqueueSnackbar(mes.message, {
         variant: mes.variant,
-        autoHideDuration: 1500,
+        autoHideDuration: 3000,
         anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'center',

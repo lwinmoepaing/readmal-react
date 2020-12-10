@@ -25,7 +25,8 @@ const AuthorIndexPage = ({ title, Auth }: MeType) => {
         storiesMeta, 
         storiesPage,
         storyLoading,
-        getStoryListByAuthor
+        getStoryListByAuthor,
+        prependStory
     } = storyHook({token: user?.token})
 
     const storyformHook = storyFormHook({token: user?.token})
@@ -40,6 +41,12 @@ const AuthorIndexPage = ({ title, Auth }: MeType) => {
     const fetchStories = useCallback( () => {
         getStoryListByAuthor(user?.authInfo?._id, storiesPage)
     }, [storiesPage]);
+
+    const addedNewStory = useCallback((story) => {
+        prependStory(story)
+        // Can Control form close 
+        storyformHook.handleClose()
+    }, [])
 
     return (
         <>
@@ -56,7 +63,11 @@ const AuthorIndexPage = ({ title, Auth }: MeType) => {
                         loadStory={fetchStories}
                         hasNextPage={storiesMeta?.hasNextPage}
                     >
-                        <StoryFormDialog isShowCreateButton={true} storyFormHook={storyformHook}/>
+                        <StoryFormDialog
+                            isShowCreateButton={true}
+                            storyFormHook={storyformHook}
+                            onCreateStorySuccess={addedNewStory}
+                        />
                     </StoryCardSwiper>
                 }
 
