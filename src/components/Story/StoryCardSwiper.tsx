@@ -46,6 +46,7 @@ const StoryCardSwiper = (
     const StoryComponents =  stories?.map(story => (
         <StoryCardSwiperItem
             key={story?._id}
+            id={story?._id}
             title={story?.title}
             description={story?.description} 
             image={story?.image}
