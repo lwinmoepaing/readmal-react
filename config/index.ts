@@ -2,6 +2,17 @@ export const BASE_API_URL = process.env.BASE_API_URL || ''
 
 export const API_URL = process.env.API_URL || ''
 
+interface CategoryList {
+     title: string
+     value: string
+}
+
+export const CATEGORY_LIST: CategoryList[] = [
+     { title: 'ထိတ်လန့်ကြောက်မက်ဖွယ်', value: 'Horror' },
+     { title: 'ဟာသဇာတ်လမ်း',value: 'Comedy' },
+     { title: 'ရိုမန်စ့်ဇာတ်လမ်း',value: 'Romance' },
+     { title: 'စုံထောက်ဇာတ်လမ်း',value: 'Detective' },
+]
 
 export interface MetaDataType {
      itemCount: number

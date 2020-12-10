@@ -63,6 +63,7 @@ export default function DefaultLayout({ children, Auth, title = 'ReadMal' }: Def
         variant="persistent"
         anchor="left"
         open={open}
+        onClose={toggleDrawer}
         classes={{
           paper: classes.drawerPaper,
         }}
@@ -143,6 +144,7 @@ const useStyles = makeStyles((theme: Theme) =>
         duration: theme.transitions.duration.leavingScreen,
       }),
       marginLeft: -drawerWidth,
+      overflowX: 'hidden'
     },
     contentShift: {
       transition: theme.transitions.create('margin', {

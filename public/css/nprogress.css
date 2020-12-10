@@ -192,10 +192,20 @@
 
 .CustomContainer {
   flex: 1;
-  max-width: 80vw;
+  max-width: 90vw;
   overflow-x: hidden;
 }
 
 .mmFont {
   font-family: 'Padauk', sans-serif;
+}
+
+.react-multiple-carousel__arrow--right {
+  right: -moz-calc(0px) !important;
+  right: calc(0px) !important;
+}
+
+.react-multiple-carousel__arrow--left {
+  left: -moz-calc(0px) !important;
+  left: calc(0px) !important;
 }

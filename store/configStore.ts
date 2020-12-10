@@ -6,6 +6,7 @@ import reduxThunk from 'redux-thunk'
 // All Reducers
 import Auth, {AuthReducerType} from './reducers/AuthReducer'
 import Drawer, {DrawerReducerType} from './reducers/DrawerReducer'
+import Snackbar, { SnackbarReducerType } from './reducers/SnackbarReducer'
 
 const bindMiddleware = (middleware) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -16,7 +17,8 @@ const bindMiddleware = (middleware) => {
 
 const combinedReducer = combineReducers({
   Auth,
-  Drawer
+  Drawer,
+  Snackbar
 })
 
 // const rootReducers = (state, action) => {
@@ -37,7 +39,8 @@ const configStore = () => createStore(combinedReducer, bindMiddleware([reduxThun
 
 export interface State {
   Auth: AuthReducerType,
-  Drawer: DrawerReducerType
+  Drawer: DrawerReducerType,
+  Snackbar: SnackbarReducerType
 }
 
 export const makeStore: MakeStore<State> = (context: Context) => configStore()

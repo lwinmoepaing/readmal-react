@@ -7,6 +7,7 @@ import { AuthReducerType } from '../../store/reducers/AuthReducer'
 import DefaultLayout from '../../src/layout/DefaultLayout'
 import profileHook from '../../src/hooks/profileHook'
 import storyHook from '../../src/hooks/storyHook'
+import storyFormHook from '../../src/hooks/storyFormHook'
 import StoryCardSwiper from '../../src/components/Story/StoryCardSwiper'
 import StoryFormDialog from '../../src/components/Story/StoryFormDialog'
 
@@ -18,13 +19,16 @@ interface MeType {
 const AuthorIndexPage = ({ title, Auth }: MeType) => {
     const user = profileHook(Auth)
 
+    // Hook Config
     const {
         stories, 
         storiesMeta, 
         storiesPage,
         storyLoading,
         getStoryListByAuthor
-    } = storyHook({token: user?.authInfo?.token})
+    } = storyHook({token: user?.token})
+
+    const storyformHook = storyFormHook({token: user?.token})
 
     // Fetching Stories
     useEffect(() => {
@@ -45,15 +49,16 @@ const AuthorIndexPage = ({ title, Auth }: MeType) => {
             </Head>
 
             <DefaultLayout Auth={user}>
-
-                <StoryCardSwiper
-                    stories={stories}
-                    storyLoading={storyLoading}
-                    loadStory={fetchStories}
-                    hasNextPage={storiesMeta?.hasNextPage}
-                >
-                    <StoryFormDialog />
-                </StoryCardSwiper>
+                {   stories?.length > 0 &&
+                    <StoryCardSwiper
+                        stories={stories}
+                        storyLoading={storyLoading}
+                        loadStory={fetchStories}
+                        hasNextPage={storiesMeta?.hasNextPage}
+                    >
+                        <StoryFormDialog isShowCreateButton={true} storyFormHook={storyformHook}/>
+                    </StoryCardSwiper>
+                }
 
             </DefaultLayout>
         </>
@@ -61,7 +66,7 @@ const AuthorIndexPage = ({ title, Auth }: MeType) => {
 }
 
 AuthorIndexPage.getInitialProps = async (context: NextPageContext) => {
-    const isPass = await AuthenticateMiddleware(context)
+    const isPass = AuthenticateMiddleware(context)
     const { Auth } = context.store.getState()
     return  {
         title: 'Readmal | User ' + isPass?.authInfo?.name,

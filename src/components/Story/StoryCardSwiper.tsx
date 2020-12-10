@@ -14,7 +14,8 @@ interface StoryCardSwiper extends childrenProps {
 const useStyle = makeStyles(theme => (
     {
         loaded: {
-            marginTop: 37
+            marginTop: 63,
+            marginLeft: 52,
         },
         circleLoaded: {
             marginLeft: 10

@@ -6,3 +6,7 @@ export const LOGOUT = 'LOGOUT'
 
 // Drawer Actions
 export const DRAWER_TOGGLE = 'DRAWER_TOGGLE'
+
+// Error Handle ACTION
+export const SNACKBAR_ADDED_MESSAGE = 'SNACKBAR_ADDED_MESSAGE'
+export const SNACKBAR_CLEAR = 'SNACKBAR_CLEAR'

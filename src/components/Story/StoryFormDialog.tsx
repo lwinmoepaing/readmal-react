@@ -1,12 +1,197 @@
-import { useState } from 'react'
+import React, { useRef } from 'react'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import { AddCircleOutline } from '@material-ui/icons'
+import { AddCircleOutline, CloseOutlined } from '@material-ui/icons'
 import TextField from '@material-ui/core/TextField';
-import { FormControl, InputLabel, makeStyles, OutlinedInput } from '@material-ui/core'
+import { FormControl,  makeStyles, MenuItem, Slide, AppBar, Toolbar, IconButton, Typography, Card, CardContent, CardMedia, CircularProgress } from '@material-ui/core'
+import { TransitionProps } from '@material-ui/core/transitions';
+import { CATEGORY_LIST } from '../../../config'
+import { StoryFormHook } from '../../hooks/storyFormHook'
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & { children?: React.ReactElement },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+interface StoryFormDialogProps {
+  dialogTitle?: string
+  isShowCreateButton?: boolean,
+  storyFormHook: StoryFormHook
+}
+
+export default function StoryFormDialog(
+  { 
+    dialogTitle = 'Story အသစ်ထည့်မည်',
+    isShowCreateButton = false,
+    storyFormHook
+  } : StoryFormDialogProps
+): JSX.Element {
+  const classes = useStyle()
+
+  const {
+    // Dialog
+    open,
+    handleClickOpen,
+    handleClose,
+
+    // Form Handle
+    handleChanges,
+    onCreateStory,
+    uploadImage,
+    // resetFormData,
+
+    // Data
+    formData: data,
+    imageUploadLoading
+  } = storyFormHook
+
+  const imageFormRef = useRef<HTMLInputElement>(null)
+
+  const imageOnChnage = () => {
+    const { files } = imageFormRef?.current
+    const imageFile = files[0]
+    try {
+      if (imageFile) { uploadImage(imageFile) }
+      imageFormRef.current.value = null
+    } catch (e) {
+      console.log(e)
+      imageFormRef.current.value = null
+    }
+  }
+
+  return (
+    <>
+      {
+        isShowCreateButton &&
+        <Button variant="outlined" color="primary" onClick={handleClickOpen} className="mmFont">
+          <AddCircleOutline  className={classes.addCircleIcon} /> Story အသစ်ထည့်မည်
+        </Button>
+      }
+      <Dialog 
+        fullScreen 
+        open={open} 
+        onClose={handleClose} 
+        maxWidth={'sm'}
+        aria-labelledby="story-form-dialog"
+        className={classes.root}
+        TransitionComponent={Transition}
+      >
+        <AppBar className={classes.appBar}>
+          <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+              <CloseOutlined />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              { dialogTitle }
+            </Typography>
+            <Button autoFocus color="inherit" onClick={onCreateStory}>
+              save
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <DialogContent>
+          <Card className={classes.dialogContent}>
+            <CardContent>
+            <FormControl size="small" fullWidth={true}>
+              <TextField
+                label="ခေါင်းစဉ်"
+                variant="outlined"
+                className="mmFont"
+                helperText="ခေါင်းစဉ်ထည့်ပေးရန်လိုအပ်ပါသည်။"
+                size="small"
+                name="title"
+                value={data.title}
+                onChange={handleChanges}
+              />
+            </FormControl>
+            <FormControl fullWidth={true}>
+              <TextField
+                label="အကြောင်းအရာ"
+                variant="outlined"
+                className="mmFont"
+                helperText="အတိုချုပ် အကြောင်းအရာကို စာဖတ်သူစိတ်ဝင်စားအောင် ထည့်မည်။"
+                size="small"
+                value={data.description}
+                name="description"
+                onChange={handleChanges}
+              />
+            </FormControl>
+            <FormControl fullWidth={true}>
+              <TextField
+                className="mmFont"
+                select
+                size="small"
+                label="Story အမျိုးအစား"
+                helperText="Story အမျိုးအစားကို ရွေးပေးရပါမည်"
+                variant="outlined"
+                value={data.category}
+                name="category"
+                onChange={handleChanges}
+              >
+                { CATEGORY_LIST?.map(cat => ( <MenuItem key={cat.value} value={cat.value}>{cat.title}</MenuItem>)) }
+              </TextField>
+            </FormControl>
+            <FormControl fullWidth={true}>
+              <Button
+                variant="outlined"
+                component="label"
+                color="primary"
+                className="mmFont"
+                fullWidth={true}
+                disabled={imageUploadLoading}
+              >
+                ပုံရွေးပြီးတင်မည်
+
+                { imageUploadLoading && <CircularProgress size={22} className={classes.circleLoaded}/>}
+
+                <input
+                  type="file"
+                  ref={imageFormRef}
+                  onChange={imageOnChnage}
+                  hidden
+                />
+              </Button>
+            </FormControl>
+            
+            <CardMedia
+              className={classes.media}
+              image={data.image}
+              title="Paella dish"
+            />
+            
+            <FormControl fullWidth={true}>
+              <TextField
+                label="Image"
+                variant="outlined"
+                className="mmFont"
+                helperText="ပုံထည့်ရန်"
+                size="small"
+                value={data.image}
+              />
+            </FormControl>
+            {/* <FormControl fullWidth={true}>
+              <TextField
+                label="Addable Episode Count"
+                variant="outlined"
+                type="number"
+                className="mmFont"
+                helperText="စာရေးဆရာထည့်သွင်းနို်ငသော episode အရေအတွက်"
+                size="small"
+                name="addable_episode_count"
+                onChange={handleChanges}
+              />
+            </FormControl> */}
+            </CardContent>
+          </Card>
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
+
 
 const useStyle = makeStyles( theme => ({
   addCircleIcon : {
@@ -21,105 +206,27 @@ const useStyle = makeStyles( theme => ({
       marginBottom: theme.spacing(.5),
     },
   },
+  appBar: {
+    position: 'relative',
+  },
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1,
+  },
+  dialogContent: {
+    maxWidth: 400,
+    margin: '0 auto',
+    backgroundColor: '#474747'
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+    borderRadius: 5,
+    marginTop: 3,
+    marginBottom: 3
+  },
+  circleLoaded: {
+    marginLeft: 8
+  }
 }))
 
-
-export default function StoryFormDialog(
-  { dialogTitle = 'Story အသစ်ထည့်မည်'}
-): JSX.Element {
-  const classes = useStyle()
-
-  const [open, setOpen] = useState(false)
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [category, setCategory] = useState('Horror')
-  const [image, setImage] = useState('')
-  const [addableEpisodeCount, setAddableEpisodeCount] = useState(0)
-  const [isIncludingPremium, setIsIncludingPremium] = useState(false)
-  const [author, setAuthor] = useState('')
-
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
-  return (
-    <>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen} className="mmFont">
-        <AddCircleOutline  className={classes.addCircleIcon} /> Story အသစ်ထည့်မည်
-      </Button>
-      <Dialog 
-        open={open} 
-        onClose={handleClose} 
-        maxWidth={'md'}
-        aria-labelledby="story-form-dialog"
-        className={classes.root}
-      >
-        <DialogTitle id="story-form-dialog" className={`mmFont ${classes.titleWidth}`}> {dialogTitle} </DialogTitle>
-        <DialogContent>
-
-          <FormControl size="small" fullWidth={true}>
-            <TextField
-              label="Title"
-              variant="outlined"
-              className="mmFont"
-              helperText="ခေါင်းစဉ်ထည့်ပေးရန်လိုအပ်ပါသည်။"
-              size="small"
-            />
-          </FormControl>
-          <FormControl fullWidth={true}>
-            <TextField
-              label="Description"
-              variant="outlined"
-              className="mmFont"
-              helperText="စာလုံးရေအနည်းငယ်နှင့် အတိုချုပ် story အကြောင်းအရာကို စာဖတ်သူစိတ်ဝင်စားအောင် ထည့်မည်။"
-              size="small"
-            />
-          </FormControl>
-          <FormControl fullWidth={true}>
-            <TextField
-              label="Category"
-              variant="outlined"
-              className="mmFont"
-              helperText="Story အမျိုးအစားကို ရွေးပေးရပါမည်"
-              size="small"
-            />
-          </FormControl>
-          <FormControl fullWidth={true}>
-            <TextField
-              label="Image"
-              variant="outlined"
-              className="mmFont"
-              helperText="ပုံထည့်ရန်"
-              size="small"
-            />
-          </FormControl>
-          <FormControl fullWidth={true}>
-            <TextField
-              label="AddableEpisodeCount"
-              variant="outlined"
-              className="mmFont"
-              helperText="စာရေးဆရာထည့်သွင်းနို်ငသော episode အရေအတွက်"
-              size="small"
-            />
-          </FormControl>
-          <FormControl fullWidth={true}>
-          </FormControl>
-
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} >
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Create 
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
-  )
-}

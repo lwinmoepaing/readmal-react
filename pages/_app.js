@@ -13,6 +13,7 @@ import { wrapper } from '../store/configStore'
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import "react-multi-carousel/lib/styles.css";
+import Snackbar from '../src/components/Snack/SnackBar'
 import theme from './theme'; 
 
 Router.onRouteChangeStart = () => Nprogress.start()
@@ -41,6 +42,7 @@ const MyApp = (props) => {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <Component {...pageProps} />
+        <Snackbar />
       </ThemeProvider>
     </Fragment>
   );
