@@ -14,7 +14,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import "react-multi-carousel/lib/styles.css";
 import Snackbar from '../src/components/Snack/SnackBar'
-import theme from './theme'; 
+import theme from '../src/theme';
 
 Router.onRouteChangeStart = () => Nprogress.start()
 Router.onRouteChangeComplete = () => Nprogress.done()
