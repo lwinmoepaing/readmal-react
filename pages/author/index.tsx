@@ -10,6 +10,7 @@ import storyHook from '../../src/hooks/storyHook'
 import storyFormHook from '../../src/hooks/storyFormHook'
 import StoryCardSwiper from '../../src/components/Story/StoryCardSwiper'
 import StoryFormDialog from '../../src/components/Story/StoryFormDialog'
+import { Typography } from '@material-ui/core'
 
 interface MeType {
     title: string,
@@ -48,6 +49,29 @@ const AuthorIndexPage = ({ title, Auth }: MeType) => {
         storyformHook.handleClose()
     }, [])
 
+
+    const LatestStoryList =   stories?.length > 0 ?
+        ( <StoryCardSwiper
+            stories={stories}
+            storyLoading={storyLoading}
+            loadStory={fetchStories}
+            hasNextPage={storiesMeta?.hasNextPage}
+        >
+            <StoryFormDialog
+                isShowCreateButton={true}
+                storyFormHook={storyformHook}
+                onCreateStorySuccess={addedNewStory}
+            />
+        </StoryCardSwiper> )
+        :
+        ( <Typography variant="h6" component="h6" className="mmFont">
+            နောက်ဆုံး Story များ  <StoryFormDialog
+                isShowCreateButton={true}
+                storyFormHook={storyformHook}
+                onCreateStorySuccess={addedNewStory}
+            />
+        </Typography> )
+
     return (
         <>
             <Head>
@@ -56,21 +80,7 @@ const AuthorIndexPage = ({ title, Auth }: MeType) => {
             </Head>
 
             <DefaultLayout Auth={user}>
-                {   stories?.length > 0 &&
-                    <StoryCardSwiper
-                        stories={stories}
-                        storyLoading={storyLoading}
-                        loadStory={fetchStories}
-                        hasNextPage={storiesMeta?.hasNextPage}
-                    >
-                        <StoryFormDialog
-                            isShowCreateButton={true}
-                            storyFormHook={storyformHook}
-                            onCreateStorySuccess={addedNewStory}
-                        />
-                    </StoryCardSwiper>
-                }
-
+                {LatestStoryList}
             </DefaultLayout>
         </>
     )

@@ -200,6 +200,27 @@ export default function StoryFormDialog(
                 disabled={storyFormLoading}
               />
             </FormControl> */}
+
+            <FormControl fullWidth={true}>
+              <Button
+                variant="contained"
+                component="label"
+                color="primary"
+                className="mmFont"
+                fullWidth={true}
+                onClick={saveNewStory}
+                disabled={storyFormLoading}
+              >
+                { 
+                  storyFormLoading ? 
+                  <> 
+                    Loading 
+                    <CircularProgress size={22} className={classes.circleLoadedWhite}/>
+                  </>
+                  : 'Story ပြုလုပ်မည်'
+                }
+              </Button>
+            </FormControl>
             </CardContent>
           </Card>
         </DialogContent>
@@ -237,12 +258,16 @@ const useStyle = makeStyles( theme => ({
   media: {
     height: 0,
     paddingTop: '56.25%', // 16:9
-    borderRadius: 5,
+    borderRadius: 8,
     marginTop: 3,
     marginBottom: 3
   },
   circleLoaded: {
     marginLeft: 8
+  },
+  circleLoadedWhite: {
+    marginLeft: 8,
+    color: '#ffffff'
   }
 }))
 
