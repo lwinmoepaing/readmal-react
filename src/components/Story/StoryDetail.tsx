@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
-import { Backdrop, Switch, Typography } from '@material-ui/core'
+import { Avatar, Backdrop, Chip, Switch, Typography } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import storyDetailHook from '../../hooks/storyDetailHook'
@@ -72,6 +72,12 @@ const StoryDetail = ({ story: fetchStory, Auth }: StoryDetailType): JSX.Element 
                         <Typography variant="h4" component="h4" className={classes.textLineHeight}>
                             {story?.title}
                         </Typography>
+
+                        <Chip
+                            avatar={<Avatar>{story?.category?.[0]?.toUpperCase()}</Avatar>}
+                            label={story?.category}
+                            variant="outlined"
+                        />
 
                         <Typography variant="h6" component="h6" className={classes.textLineHeight}>
                             {story?.description}
