@@ -59,7 +59,7 @@ export default function StoryCardSwiperItem({ id, title, description, image, isL
                 </div>
             </Card>
         ) : (
-            <Card className={classes.root}>
+            <Card className={[classes.root, 'mmFont'].join(' ')}>
                 <div className={classes.details}>
                   <CardContent className={classes.content}>
                     <Typography component="h6" variant="h6" className={classes?.title}>
@@ -71,16 +71,16 @@ export default function StoryCardSwiperItem({ id, title, description, image, isL
                   </CardContent>
                   <CardActions>
                     <Link href={`/author/story/${id}`} passHref>
-                      <Button variant="contained" size="small" color="primary">
-                        View Detail
+                      <Button variant="contained" size="small" color="primary" fullWidth={true}>
+                        ဖတ်မည်
                       </Button>
                     </Link>
                   </CardActions>
                 </div>
                 <CardMedia
-                    className={classes.cover}
-                    image={image}
-                    title={title}
+                  className={classes.cover}
+                  image={image}
+                  title={title}
                 />
             </Card>
         )

@@ -35,7 +35,6 @@ export default function errorHandleHook (): any[] {
     const handleResponseError = async (response: ErrorReponsse) => {
         const statusCode = response.status
         const res = await response.json<ErrorCatch>()
-        console.log('Change Error Json', res)
         
         switch(statusCode) {
           case NOT_AUTHENTICATE: 
