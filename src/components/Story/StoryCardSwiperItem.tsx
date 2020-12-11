@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import CardMedia from '@material-ui/core/CardMedia'
+import CardActionArea from '@material-ui/core/CardActionArea'
 import Typography from '@material-ui/core/Typography'
 import { childrenProps } from '../../../config';
 import { Button } from '@material-ui/core';
@@ -60,28 +61,32 @@ export default function StoryCardSwiperItem({ id, title, description, image, isL
             </Card>
         ) : (
             <Card className={[classes.root, 'mmFont'].join(' ')}>
-                <div className={classes.details}>
-                  <CardContent className={classes.content}>
-                    <Typography component="h6" variant="h6" className={classes?.title}>
-                        { title }
-                    </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
-                        { description }
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Link href={`/author/story/${id}`} passHref>
-                      <Button variant="contained" size="small" color="primary" fullWidth={true}>
-                        ဖတ်မည်
-                      </Button>
-                    </Link>
-                  </CardActions>
-                </div>
-                <CardMedia
-                  className={classes.cover}
-                  image={image}
-                  title={title}
-                />
+              <div className={classes.details}>
+                <Link href={`/author/story/${id}`} passHref>
+                  <CardActionArea>
+                    <CardContent className={classes.content}>
+                      <Typography component="h6" variant="h6" className={classes?.title}>
+                          { title }
+                      </Typography>
+                      <Typography variant="subtitle1" color="textSecondary">
+                          { description }
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Link>
+                <CardActions>
+                  <Link href={`/author/story/${id}`} passHref>
+                    <Button variant="contained" size="small" color="primary" fullWidth={true}>
+                      ဖတ်မည်
+                    </Button>
+                  </Link>
+                </CardActions>
+              </div>
+              <CardMedia
+                className={classes.cover}
+                image={image}
+                title={title}
+              />
             </Card>
         )
     

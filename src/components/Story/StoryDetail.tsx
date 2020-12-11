@@ -115,8 +115,6 @@ const StoryDetail = ({ story: fetchStory, Auth }: StoryDetailType): JSX.Element 
                                 Episode {story?.addable_episode_count} ပိုင်း ထည့်သွင်းနိုင်ပါသည် 
                             </Typography>
                         }
-
-
                     </div>
                 </Grid>
             </Grid>
@@ -136,6 +134,7 @@ const StoryDetail = ({ story: fetchStory, Auth }: StoryDetailType): JSX.Element 
                                 accessModify={accessPermission}
 
                                 publishEpisode={publishEpisode}
+                                goEpisodeRoute='/author/episode'
                             />
                         </Grid>    
                     )
