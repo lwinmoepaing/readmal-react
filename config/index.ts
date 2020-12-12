@@ -13,7 +13,7 @@ export const CHARACTER_COLORS = [
 ]
 
 export const CATEGORY_LIST: CategoryList[] = [
-     { title: 'ထိတ်လန့်ကြောက်မက်ဖွယ်', value: 'Horror' },
+     { title: 'ထိတ်လန့်ဖွယ်ဇာတ်လမ်း', value: 'Horror' },
      { title: 'ဟာသဇာတ်လမ်း',value: 'Comedy' },
      { title: 'ရိုမန်စ့်ဇာတ်လမ်း',value: 'Romance' },
      { title: 'စုံထောက်ဇာတ်လမ်း',value: 'Detective' },
