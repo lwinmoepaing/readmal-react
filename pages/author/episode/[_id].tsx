@@ -36,8 +36,7 @@ const AuthorStoryDetailPage = ({ title, Auth, id, episode }: AuthorStoryDetailPa
 
             <DefaultLayout Auth={user}>
                { !episode &&  <Typography variant="h6" component="h6"> Episode is not found </Typography> }
-               { episode && <Typography variant="h6" component="h6"> Episode title is {episode?.title} </Typography>}
-               { showEditor ? <Editor /> : <h1> Context Box </h1> }
+               { showEditor ? <Editor context={episode?.snap_context} episodeId={episode?._id}  backgroundImage={episode?.background_context_image}/> : <h1> Context Box </h1> }
             </DefaultLayout>
         </>
     )

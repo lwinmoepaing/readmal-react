@@ -11,9 +11,11 @@ export interface contextType {
 	type: string,
 	message: string,
 	context_position: "left" | "center" | "right",
-	context_url: string,
+    context_url: string,
+    has_audio: boolean,
+    audio_url: string,
 	is_theme_change: boolean,
-    is_theme_change_url: string,
+    theme_change_url: string,
     is_show_character: boolean,
 	character: characterType
 }
@@ -36,8 +38,10 @@ export class Context implements contextType {
     message: string
     context_position: "left" | "center" | "right"
     context_url: string
+    has_audio: boolean
+    audio_url: string
     is_theme_change: boolean
-    is_theme_change_url: string
+    theme_change_url: string
     character: characterType
 
     // Custom Type 
@@ -45,27 +49,34 @@ export class Context implements contextType {
     is_show_character: boolean = true
 
     constructor({
+        id,
         type = 'MESSAGE',
         message = '',
         context_position = 'left',
         context_url = '',
+        has_audio = false,
+        audio_url = '',
         is_theme_change = false,
-        is_theme_change_url = '',
+        theme_change_url = '',
         character,
     }: contextType) {
+        this.id = id 
         this.type = type
         this.message = message
         this.context_position = context_position
         this.context_url = context_url
+        this.has_audio = has_audio
+        this.audio_url = audio_url
         this.is_theme_change = is_theme_change
-        this.is_theme_change_url = is_theme_change_url
+        this.theme_change_url = theme_change_url
         this.character = character
     }
+
 }
 
-const makeCharacter = (id: string, name: string, color: string): characterType => ({ id, name, color })
+export const makeCharacter = (id: string, name: string, color: string): characterType => ({ id, name, color })
 
-const makeContext = (
+export const makeContext = (
     id: string ,
     message: string,
     character: characterType,
