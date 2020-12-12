@@ -8,20 +8,21 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import storyDetailHook from '../../hooks/storyDetailHook'
 import { AuthReducerType } from '../../../store/reducers/AuthReducer'
 import StoryDetailEpisodeItem from './StoryDetailEpisodeItem'
-import { BASE_API_URL } from '../../../config'
+import { childrenProps } from '../../../config'
+import episodeFormHook from '../../../src/hooks/episodeFormHook'
+import EpisodeFormDialog from '../../../src/components/Episode/EpisodeFormDialog'
 
-interface StoryDetailType {
+interface StoryDetailType extends childrenProps {
     story: any
     Auth?: AuthReducerType
 }
 
-const StoryDetail = ({ story: fetchStory, Auth }: StoryDetailType): JSX.Element => {
+const StoryDetail = ({ story: fetchStory, Auth, children }: StoryDetailType): JSX.Element => {
     const classes = useStyles()
 
     const [story, setStory] = useState<any | null>(fetchStory)
     const [storyIsPublished, setStoryIsPublished] = useState<boolean>(story?.is_published ?? false)
     const [storyIsFinished, setStoryIsFinished] = useState<boolean>(story?.is_finished ?? false)
-
 
     // use Story Detail Hook
     const {
@@ -32,6 +33,20 @@ const StoryDetail = ({ story: fetchStory, Auth }: StoryDetailType): JSX.Element 
         finishStory,
         publishStoryEpisode
     } = storyDetailHook({ token: Auth?.token })
+
+    const episodeformHook = episodeFormHook({token: Auth?.token, story_id: story?._id })
+
+    // When Success added new episode, 
+    const addNewEpisode = useCallback((episode) => {
+        setStory({
+            ...story,
+            episodes: [
+                ...story?.episodes,
+                episode
+            ]
+        })
+        episodeformHook.handleClose()
+    }, [story])
 
     // Access Permission
     const accessPermission :boolean = Auth?.authInfo?.role === 'ADMIN' ||
@@ -95,8 +110,7 @@ const StoryDetail = ({ story: fetchStory, Auth }: StoryDetailType): JSX.Element 
                             Publish { storyIsPublished ? 'တင်ပြီးပါပြီ' : 'တင်မည်' }
                         </Typography>
 
-                        {
-                            storyIsPublished && !storyIsFinished && 
+                        { accessPermission && storyIsPublished && !storyIsFinished && 
                             <Typography variant="body2" className={classes.textLineHeight}>
                                 <Switch
                                     color="primary"
@@ -110,7 +124,7 @@ const StoryDetail = ({ story: fetchStory, Auth }: StoryDetailType): JSX.Element 
                             </Typography>
                         }
 
-                        { story?.addable_episode_count > 0 &&
+                        { accessPermission && story?.addable_episode_count > 0 &&
                             <Typography variant="body2" className={classes.textLineHeight}>
                                 Episode {story?.addable_episode_count} ပိုင်း ထည့်သွင်းနိုင်ပါသည် 
                             </Typography>
@@ -118,7 +132,20 @@ const StoryDetail = ({ story: fetchStory, Auth }: StoryDetailType): JSX.Element 
                     </div>
                 </Grid>
             </Grid>
-            <Grid container spacing={3}>
+
+            {
+                accessPermission &&
+                <EpisodeFormDialog
+                    isShowCreateButton={true}
+                    episodeFormHook={episodeformHook}
+                    onCreateEpisodeSuccess={addNewEpisode}
+                />
+            }
+
+            {/* Children Component */}
+            { children }
+            {/* Children Component Finished */}
+            <Grid container spacing={3} className={classes.episodeContainerr}>
                 { 
                     story?.episodes
                      ?.sort((a, b) => b?.episode_number - a?.episode_number )
@@ -127,7 +154,7 @@ const StoryDetail = ({ story: fetchStory, Auth }: StoryDetailType): JSX.Element 
                             <StoryDetailEpisodeItem
                                 episodeId={episode?._id}
                                 title={episode?.title}
-                                storyImage={`${BASE_API_URL}/episodes/${story?.category}.jpg`}
+                                storyImage={episode?.image}
                                 description={episode?.description}
                                 episodeNo={episode?.episode_number}
                                 episodeIsPublised={episode?.is_published}
@@ -156,7 +183,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center center',
-      marginBottom: '2rem',
+      marginBottom: '1rem',
       borderRadius: 8
     },
     paper: {
@@ -194,6 +221,10 @@ const useStyles = makeStyles((theme: Theme) =>
         zIndex: theme.zIndex.drawer + 1,
         color: '#fff',
     },
+
+    episodeContainerr: {
+        marginTop: '1rem'
+    }
   }),
 );
 

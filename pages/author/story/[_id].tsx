@@ -29,8 +29,12 @@ const AuthorStoryDetailPage = ({ title, Auth, id, story }: AuthorStoryDetailPage
             </Head>
 
             <DefaultLayout Auth={user}>
-               { !story &&  <Typography variant="h6" component="h6"> Story is not found </Typography> }
-               { story && <StoryDetail story={story} Auth={user} /> }
+               { !story &&  <Typography variant="h6" component="h6"> Story Id: {id} is not found </Typography> }
+               { story && 
+                    <>
+                        <StoryDetail story={story} Auth={user} />
+                    </>
+               }
             </DefaultLayout>
         </>
     )

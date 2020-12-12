@@ -50,8 +50,6 @@ const IndexPage = ({ title, isAuth } : HomeInitialProps) => {
         <meta property="og:title" content={title} key={title} />
       </Head>
       <Container> 
-        <h1> Readmal </h1>
-        
         <Home
           messages={touchMessages}
           onPress={increaseTouchMessage}

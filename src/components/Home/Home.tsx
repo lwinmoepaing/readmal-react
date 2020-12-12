@@ -49,13 +49,13 @@ const Home = ({ messages, onPress, isAuth, finishedStory }: HomeProps) => {
         {/* First Section Left Grid Finished */}
 
         {/* Second Section Left Grid */}
-        <Grid item xs={12} sm={4} md={5}>
+        <Grid item xs={12} sm={3} md={5}>
           {
             isAuth ?
               <Link href="/me" passHref>
                 <Button variant="outlined" color="primary" >Me</Button>
               </Link> :
-              <Button variant="contained" color="primary" onClick={loginWithFacebook}>
+              <Button variant="contained" color="primary" onClick={loginWithFacebook} fullWidth={true}>
                 Login With Facebook
               </Button>
           }

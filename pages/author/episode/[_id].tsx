@@ -9,6 +9,7 @@ import { AuthReducerType } from '../../../store/reducers/AuthReducer'
 import DefaultLayout from '../../../src/layout/DefaultLayout'
 import profileHook from '../../../src/hooks/profileHook'
 import { getEpisodeById } from '../../../src/api/episode'
+import Editor from '../../../src/components/Editor/Editor'
 
 interface AuthorStoryDetailPageType {
     title: string,
@@ -20,6 +21,12 @@ interface AuthorStoryDetailPageType {
 const AuthorStoryDetailPage = ({ title, Auth, id, episode }: AuthorStoryDetailPageType) => {
     const user = profileHook(Auth)
 
+    // Access Permission
+    const accessPermission :boolean = Auth?.authInfo?.role === 'ADMIN' ||
+        Auth?.authInfo?.role === 'AUTHOR' && episode?.author?._id === Auth?.authInfo?._id
+
+    const showEditor = accessPermission && episode && episode?.is_editable
+
     return (
         <>
             <Head>
@@ -30,6 +37,7 @@ const AuthorStoryDetailPage = ({ title, Auth, id, episode }: AuthorStoryDetailPa
             <DefaultLayout Auth={user}>
                { !episode &&  <Typography variant="h6" component="h6"> Episode is not found </Typography> }
                { episode && <Typography variant="h6" component="h6"> Episode title is {episode?.title} </Typography>}
+               { showEditor ? <Editor /> : <h1> Context Box </h1> }
             </DefaultLayout>
         </>
     )

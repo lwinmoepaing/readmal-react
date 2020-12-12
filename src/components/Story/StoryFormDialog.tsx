@@ -177,30 +177,6 @@ export default function StoryFormDialog(
               title="Paella dish"
             />
             
-            {/* <FormControl fullWidth={true}>
-              <TextField
-                label="Image"
-                variant="outlined"
-                className="mmFont"
-                helperText="ပုံထည့်ရန်"
-                size="small"
-                value={data.image}
-              />
-            </FormControl> */}
-            {/* <FormControl fullWidth={true}>
-              <TextField
-                label="Addable Episode Count"
-                variant="outlined"
-                type="number"
-                className="mmFont"
-                helperText="စာရေးဆရာထည့်သွင်းနို်ငသော episode အရေအတွက်"
-                size="small"
-                name="addable_episode_count"
-                onChange={handleChanges}
-                disabled={storyFormLoading}
-              />
-            </FormControl> */}
-
             <FormControl fullWidth={true}>
               <Button
                 variant="contained"
