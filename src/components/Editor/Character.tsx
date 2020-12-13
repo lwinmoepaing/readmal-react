@@ -112,7 +112,7 @@ const Character = ({editorHook}: CharacterProps): JSX.Element => {
                         >
                             { color === selectedColor ? (
                                 <> 
-                                    <DoneIcon />  'ရွေးချယ်ထားသည်'
+                                    <DoneIcon />  ရွေးချယ်ထားသည်
                                 </>
                             ) : <ColorizeIcon />}
                         </Fab>))
