@@ -39,10 +39,10 @@ export default function Editor({context, episodeId, backgroundImage}: EditorProp
         </div>
 
         <BottomNavigation
-            value={tabIndicator}
-            onChange={onChangeTab}
-            showLabels
-            className={[classes.bottomNavigator, 'mmFont'].join(' ')}
+          value={tabIndicator}
+          onChange={onChangeTab}
+          showLabels
+          className={[classes.bottomNavigator, 'mmFont'].join(' ')}
         >
             <BottomNavigationAction value="character"  label="ဇာတ်ကောင်များ" icon={<AccountCircleIcon />} />
             <BottomNavigationAction value="message" label="စကားပြော" icon={<MessageIcon />} />

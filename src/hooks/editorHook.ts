@@ -26,7 +26,7 @@ export interface EditorHook {
 
   // Character Methods
   onDeleteMessage: (messageId: string) => void
-  onEditMessage: (message: contextType) => void
+  onEditMessage: (message: contextType, serialNumber?: number) => void
 }
 
 interface EditorHookProps {
@@ -122,10 +122,31 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
     setMessages(messages.filter(mes => mes.id !== mesId))
   }, [messages])
 
-  const onEditMessage = useCallback((updatedMessage: contextType) => {
+  const onEditMessage = useCallback((updatedMessage: contextType, serialNumber: number) => {
     const index = messages.findIndex(mes => mes.id === updatedMessage.id)
-    const returnMessage = [...messages]
+    // Af first we make updateMessage
+    let returnMessage = [...messages]
     returnMessage[index] = updatedMessage
+    
+    // If We need to change Position
+    const changePosition = serialNumber - 1
+    const isNeedToChangePosition = changePosition !== index
+    const removeUpdateMessages = messages.filter(mes => mes.id !== updatedMessage.id)
+
+    if (isNeedToChangePosition && serialNumber === messages.length) {
+      // Go To Last Message
+      returnMessage = [ ...removeUpdateMessages, updatedMessage]
+    } else if ( isNeedToChangePosition && changePosition === 0 ) {
+      // Go To First Message
+      returnMessage = [ updatedMessage, ...removeUpdateMessages]
+    } else if ( isNeedToChangePosition ) {
+      // If Between two values
+      // updatedMessage = updatedMessage.filter(
+      //   (mes) => mes.id !== changeMessage.id
+      // )
+      returnMessage = [...removeUpdateMessages]
+      returnMessage.splice(changePosition, 0, updatedMessage)
+    }
     setMessages(returnMessage)
   }, [messages])
 

@@ -14,6 +14,7 @@ import {
     Radio,
     FormLabel,
     RadioGroup,
+    Input,
     FormControlLabel } from '@material-ui/core'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import { useCallback, useState, useEffect } from 'react'
@@ -50,11 +51,13 @@ const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
 
     // Edited Message
     const [editedMessage, setEditedMessage] = useState<contextType | null>(null)
+    const [editedMessageSerial, setEditedMessageSerial] = useState<number>(0)
     const [openEditMessageDialog, setOpenEditMessageDialog] = useState<boolean>(false)
 
     // When click edit button of message
-    const openEditDialog = useCallback((messageId: string) => {
+    const openEditDialog = useCallback((messageId: string, index: number) => {
         setEditedMessage(messages.find(mes => mes.id === messageId))
+        setEditedMessageSerial(index + 1)
         setOpenEditMessageDialog(true)
     }, [messages, openEditMessageDialog])
 
@@ -68,9 +71,16 @@ const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
 
     // Edit Message Method
     const editMessage = useCallback(() => {
-        onEditMessage(editedMessage)
+        onEditMessage(editedMessage, editedMessageSerial)
         setOpenEditMessageDialog(false)
-    }, [editedMessage])
+    }, [editedMessage, editedMessageSerial])
+
+    // Min and Max EditedMessage Index Handler
+    const handleOnChangeEditedMessageIndex = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        const serialNumber = +event.target.value
+        if (serialNumber <= 0 || serialNumber  > messages.length) return
+        setEditedMessageSerial(serialNumber)
+    }, [messages])
 
     return (
         <div className={classes.Wrapper}>
@@ -101,7 +111,7 @@ const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
                                     <IconButton aria-label="delete" size="small" className={classes.messageActionButton}  style={{backgroundColor: '#ff7675'}} onClick={() => handleDeleteMessage(mes?.id)}>
                                         <DeleteIcon fontSize="inherit" />
                                     </IconButton>
-                                    <IconButton aria-label="edit" size="small" className={classes.messageActionButton}  style={{backgroundColor: '#00b894'}} onClick={() => openEditDialog(mes?.id)}>
+                                    <IconButton aria-label="edit" size="small" className={classes.messageActionButton}  style={{backgroundColor: '#00b894'}} onClick={() => openEditDialog(mes?.id, index)}>
                                         <EditIcon fontSize="inherit" />
                                     </IconButton>
                                 </div>
@@ -157,10 +167,24 @@ const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
                             onChange={handleInputEditedMessage}
                         >
                             <FormControlLabel value="LEFT" control={<Radio color="primary" />} label="ဘယ်ဘက်" />
-                            <FormControlLabel value="CENTER" control={<Radio color="primary" />} label="အလယ်နေရာ" />
+                            <FormControlLabel value="CENTER" control={<Radio color="primary" />} label="အလယ်နေရာ(အတွေး)" />
                             <FormControlLabel value="RIGHT" control={<Radio color="primary" />} label="ညာဘက်" />
                         </RadioGroup>
                     </FormControl>
+
+                    <FormControl size="small" fullWidth={true}>
+                        <TextField
+                            label="အမှတ်စဉ် နံပါတ်"
+                            type="number"
+                            variant="outlined"
+                            className="mmFont"
+                            size="small"
+                            name="message"
+                            value={editedMessageSerial}
+                            onChange={handleOnChangeEditedMessageIndex}
+                        />
+                    </FormControl>
+
                 </DialogContent>
                 <DialogActions>
                     <Button color="default" variant="outlined" fullWidth={true} onClick={() => setOpenEditMessageDialog(false)}>
