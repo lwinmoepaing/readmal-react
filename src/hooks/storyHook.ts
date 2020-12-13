@@ -3,7 +3,7 @@ import { API_URL, BASE_API_URL, MetaDataType } from "../../config";
 import { AuthReducerType } from "../../store/reducers/AuthReducer";
 
 interface StoryHookProps {
-    token?: string,
+    token?: string
 }
 
 interface StoryHookReturnType {

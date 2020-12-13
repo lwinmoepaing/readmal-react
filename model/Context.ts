@@ -84,7 +84,7 @@ export const makeContext = (
     type: string = 'MESSAGE',
     context_url: string = '',
     is_theme_change: boolean = false,
-    is_theme_change_url: string = '',
+    theme_change_url: string = '',
     is_show_character: boolean = true
 ): any  => {
     id = id || shortUUID().new();
@@ -96,7 +96,7 @@ export const makeContext = (
         context_position: context_position?.toUpperCase(),
         context_url,
         is_theme_change,
-        is_theme_change_url,
+        theme_change_url,
         character,
         is_show_character
     }

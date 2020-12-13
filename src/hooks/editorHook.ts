@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react' 
-import { CHARACTER_COLORS } from '../../config'
+import { API_URL, CHARACTER_COLORS } from '../../config'
 import { characterType, contextType, makeContext, Character, Context } from '../../model/Context'
 import { makeCharacter } from '../../model/Context'
 import shortUUID from 'short-uuid'
@@ -35,11 +35,15 @@ interface EditorHookProps {
   context: contextType[] 
   episode_id: string
   backgroundImage: string
+  token: string
 }
 
-export default function editorHook ({ context = [] , episode_id,  backgroundImage}: EditorHookProps): EditorHook {
+export default function editorHook ({ context = [] , episode_id,  backgroundImage, token}: EditorHookProps): EditorHook {
+  // When Updating Editor
+  const [isUpdatingEditor, setIsUpdatingEditor ] = useState<boolean>(false)
+
   // Background Context Image
-  const [backgroundContextImage, setBackgroundContextImage] = useState<string>(backgroundImage)
+  const [ backgroundContextImage, setBackgroundContextImage] = useState<string>(backgroundImage)
 
   // Use Error Handler Hook
   const [ handleErrorMessage, clearMessage] = errorHandleHook()
@@ -73,6 +77,7 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
     const manageColors = characters.length === 0 ? CHARACTER_COLORS : CHARACTER_COLORS.filter(color => !existingCharacterColors.includes(color))
     setColors(manageColors)
     setSelectedColor(null)
+    updateMessageToServer()
   }, [characters])
 
   /**
@@ -127,6 +132,7 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
   // When Author Delete Message
   const onDeleteMessage = useCallback((mesId: string) => {
     setMessages(messages.filter(mes => mes.id !== mesId))
+    updateMessageToServer(messages.filter(mes => mes.id !== mesId))
   }, [messages])
 
   const onEditMessage = useCallback((updatedMessage: contextType, serialNumber: number) => {
@@ -155,6 +161,7 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
       returnMessage.splice(changePosition, 0, updatedMessage)
     }
     setMessages(returnMessage)
+    updateMessageToServer(returnMessage)
   }, [messages])
 
   const onCreateMessage = useCallback(( inputMessage: string, position: 'LEFT' | 'RIGHT' | 'CENTER') => {
@@ -166,12 +173,37 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
       const newContext = new Context(makeContext(null, inputMessage, character, position))
 
       setMessages([... messages, newContext])
+      updateMessageToServer([... messages, newContext])
 
     } catch (e) {
       handleErrorMessage(e)
       throw (e)
     }
   }, [messages, selectedCharacter])
+
+  // Every Changes Character
+  const updateMessageToServer = useCallback( async (gotMessage?: contextType[]) => {
+      setIsUpdatingEditor(true)
+      try {
+          const url = `${API_URL}/episode/${episode_id}/update-context`
+          const options = {
+              method: 'PUT',
+              headers: { 
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              },
+              body: JSON.stringify({ context: gotMessage ? gotMessage :  messages })
+          }
+          const response = await fetch(url, options)
+    
+          const res = await response.json()
+          setIsUpdatingEditor(false)
+    
+      } catch (e) {
+          setIsUpdatingEditor(false)
+      }
+  }, [messages])
+
 
   return {
     backgroundContextImage,

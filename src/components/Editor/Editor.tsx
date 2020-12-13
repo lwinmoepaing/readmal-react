@@ -14,13 +14,14 @@ interface EditorProps {
     context: contextType[]
     episodeId: string
     backgroundImage: string
+    token: string
 }
 
-export default function Editor({context, episodeId, backgroundImage}: EditorProps) {
+export default function Editor({context, episodeId, backgroundImage, token}: EditorProps) {
   const classes = useStyles();
-  const [tabIndicator, setTabIndicator] = React.useState('message');
+  const [tabIndicator, setTabIndicator] = React.useState('character');
 
-  const useEditorHook = editorHook({ context, episode_id: episodeId, backgroundImage})
+  const useEditorHook = editorHook({ context, episode_id: episodeId, backgroundImage, token })
 
   const onChangeTab = useCallback((event, newValue) => {
     setTabIndicator(newValue);
