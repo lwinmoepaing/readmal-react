@@ -63,8 +63,8 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
   // Characters Methods
   // When Fab Color Icon Selected
   const onSelectColor = useCallback((val: string) :void => {
-    setSelectedColor(val)
-  }, [colors])
+    setSelectedColor(val === selectedColor ? null : val)
+  }, [colors, selectedColor])
 
   // When Author Delete Character
   const onDeleteCharacter = useCallback((charId: string) => {

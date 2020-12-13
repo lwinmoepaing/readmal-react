@@ -78,7 +78,6 @@ const Character = ({editorHook}: CharacterProps): JSX.Element => {
                             onChange={onChangeCharacterName}
                             name="description"
                             onKeyUp={onEnterKeyCharacterNameInput}
-                            focused
                         />
                     </FormControl>
                     <FormControl 
