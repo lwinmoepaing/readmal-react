@@ -93,4 +93,34 @@ export const CarouselResponsive = {
        breakpoint: { max: 464, min: 0 },
        items: 1,
      },
-   }
+}
+
+export const translateErrorMessage = (mes: string): string => {
+     let returnMessage = mes
+
+     if (mes === 'There should be at least 80 line messages.') {
+          returnMessage = 'အနည်းဆုံး စာကြောင်းရေ ဂ၀ ရှိဖို့လိုအပ်ပါသည်။'
+     }
+
+     if (mes === 'You need to publish previous episode first.') {
+          returnMessage = 'အပိုင်းဟောင်း များကို အရင်တင်ပြီးမှ လက်ရှိအပုဒ်ကို Publish လုပ်ပေးပါ။'
+     }
+
+     if (mes === '"title" is not allowed to be empty') {
+          returnMessage = 'ခေါင်းစဉ် ထည့်ရန်လိုအပ်ပါသည်။'
+     }
+     
+     if (mes === 'There must be at least one published episode.') {
+          returnMessage = 'အနည်းဆုံး အပိုင်း တစ်ပိုင်း ကို Publish တင်ပေးရန်လိုအပ်ပါသည်။'
+     }
+
+     if (mes === 'You had to make sure all episodes need to be published.') {
+          returnMessage = 'အပိုင်း အားလုံးကို Publish တင်ပြီးမှ ဇတ်သိမ်းပေးနိုင်ပါမည်။'
+     }
+     
+     if (mes === '"description" is not allowed to be empty') {
+          returnMessage = 'အကြောင်းအရာ ထည့်ပေးရန်လိုအပ်ပါသည်။'
+     }
+     
+     return returnMessage
+}

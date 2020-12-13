@@ -5,6 +5,8 @@ import { makeCharacter } from '../../model/Context'
 import shortUUID from 'short-uuid'
 import errorHandleHook from './errorHandleHook'
 export interface EditorHook {
+  isUpdatingEditor: boolean
+
   // Background Context 
   backgroundContextImage: string
 
@@ -206,6 +208,8 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
 
 
   return {
+    isUpdatingEditor,
+    
     backgroundContextImage,
 
     // All Character Data

@@ -1,5 +1,6 @@
-import { makeStyles, Grow } from "@material-ui/core"
+import { makeStyles, Grow, Chip, Avatar } from "@material-ui/core"
 import { contextType } from "../../../model/Context"
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 
 interface MessageListType extends contextType{
 }
@@ -16,6 +17,7 @@ const MessageList = (props: MessageListType) => {
 
     const dynamicCharacterClass = [
         classes.messageCharacterWrapper,
+        'mmFont', 
         dynamicDirection
     ].join(' ')
 
@@ -35,7 +37,15 @@ const MessageList = (props: MessageListType) => {
 
                 {
                     props?.is_show_character &&
-                    <p className={dynamicCharacterClass} style={{color: props?.character?.color}}>{props?.character?.name} </p>
+                    <div className={dynamicCharacterClass}>
+                        {/* <Chip
+                            label={props?.character?.name}
+                            style={{borderColor:  props?.character?.color}}
+                            className={dynamicCharacterClass}
+                            variant="outlined"
+                        /> */}
+                        <p className={dynamicCharacterClass} style={{color: props?.character?.color}}>{props?.character?.name} </p>
+                    </div>
                 }
             </div>
         </Grow >    
@@ -44,7 +54,7 @@ const MessageList = (props: MessageListType) => {
 
 const useStyle = makeStyles((theme) => ({
     messageGroupWrapper: {
-        margin: '0 .7rem'
+        margin: '.5rem .7rem'
     },
     messageWrapper: {
         marginTop: '.3rem',
@@ -54,11 +64,11 @@ const useStyle = makeStyles((theme) => ({
         overflow: 'hidden',
     },
     messageCharacterWrapper: {
-        width: '75%',
         borderRadius: '1rem',
         display: 'flex',
         overflow: 'hidden',
-        margin: 0
+        margin: 0,
+        fontWeight: 'bold'
     },
     message: {
         margin: 0,

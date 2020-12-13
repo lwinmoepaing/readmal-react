@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Router from 'next/router'
 import { contextType } from '../../../model/Context'
 import { Button } from "@material-ui/core"
-import { API_URL } from '../../../config'
+import { API_URL, BASE_API_URL } from '../../../config'
 import MessageList from '../Message/MessageList'
 import TouchAppIcon from '@material-ui/icons/TouchApp';
 
@@ -26,10 +26,38 @@ const Home = ({ messages, onPress, isAuth, finishedStory }: HomeProps) => {
   return (
     <div className={classes.root} >
       <Grid container spacing={3}>
+       
+        {/* Second Section Left Grid */}
+        <Grid item xs={12} sm={3} md={6} className={classes.LogoContainer}>
+
+          <img src="/logo.png"  className={classes.Logo} />
+          
+          {
+            isAuth ?
+              <Link href="/me" passHref>
+                <Button variant="outlined" color="primary" fullWidth={true} >Me</Button>
+              </Link> :
+              <Button variant="contained" color="primary" onClick={loginWithFacebook} fullWidth={true} className={classes.Button}>
+                Login With Facebook
+              </Button>
+          }
+
+          <Link href="/about" passHref>
+            <Button variant="text" color="primary" fullWidth={true} className={classes.Button}> About </Button>
+          </Link>
+          
+          <Link href="/privacy" passHref>
+            <Button variant="text" color="primary" fullWidth={true} className={classes.Button}> Privacy </Button>
+          </Link>
+
+        
+        </Grid>
+        {/* Second Section Left Grid Finished */}
 
         {/* First Section Left Grid */}
-        <Grid item xs={12} sm={9} md={7}>
-          <div className="iphone-x" onClick={onPress}>
+        <Grid item xs={12} sm={9} md={6}>
+          <div className="iphone-x" onClick={onPress} >
+            <img className={classes.backgroundImage} src={`${BASE_API_URL}/episodes/background_context.jpg`} />
             <i>Speaker</i>
             <div className={classes.messageWraper}>
               {
@@ -47,29 +75,32 @@ const Home = ({ messages, onPress, isAuth, finishedStory }: HomeProps) => {
           </div>
         </Grid>
         {/* First Section Left Grid Finished */}
-
-        {/* Second Section Left Grid */}
-        <Grid item xs={12} sm={3} md={5}>
-          {
-            isAuth ?
-              <Link href="/me" passHref>
-                <Button variant="outlined" color="primary" >Me</Button>
-              </Link> :
-              <Button variant="contained" color="primary" onClick={loginWithFacebook} fullWidth={true}>
-                Login With Facebook
-              </Button>
-          }
-        </Grid>
-        {/* Second Section Left Grid Finished */}
       </Grid>
     </div>
   )
 }
 
 const useStyles = makeStyles((theme) => ({
+  Logo: {
+    backgroundColor: '#fff',
+    display: 'block',
+    width: 250,
+    borderRadius: 250,
+    margin: '0 auto',
+    marginBottom: '2.3rem',
+  },
+  
+  LogoContainer: {
+    marginBottom: '2.2rem'
+  },
+
+  Button: {
+    margin: '.25rem 0'
+  },
+  
   root: {
     flexGrow: 1,
-    marginTop: '1rem'
+    marginTop: '3rem'
   },
   paper: {
     padding: theme.spacing(2),
@@ -90,7 +121,18 @@ const useStyles = makeStyles((theme) => ({
     left: '50%',
     transform: 'translateX(-50%)',
     fontSize: 45
-  }
+  },
+
+  backgroundImage: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    zIndex: -1,
+    opacity: '0.37',
+},
 }))
 
 export default Home

@@ -98,7 +98,7 @@ const StoryDetail = ({ story: fetchStory, Auth, children }: StoryDetailType): JS
                             {story?.description}
                         </Typography>
 
-                        <Typography variant="body2" className={classes.textLineHeight}>
+                        <Typography component={'div'} variant="body2" className={classes.textLineHeight}>
                             <Switch
                                 color="primary"
                                 checked={storyIsPublished}
@@ -106,12 +106,14 @@ const StoryDetail = ({ story: fetchStory, Auth, children }: StoryDetailType): JS
                                 name="is_published"
                                 disabled={storyIsPublished || storyPublishLoading}
                             />
-                            { storyPublishLoading && <CircularProgress size={20} className={classes.publishedStoryLoading} /> }
+                            <>
+                                { storyPublishLoading && <CircularProgress size={20} className={classes.publishedStoryLoading} /> }
+                            </>
                             Publish { storyIsPublished ? 'တင်ပြီးပါပြီ' : 'တင်မည်' }
                         </Typography>
 
                         { accessPermission && storyIsPublished && !storyIsFinished && 
-                            <Typography variant="body2" className={classes.textLineHeight}>
+                            <Typography component={'div'} variant="body2" className={classes.textLineHeight}>
                                 <Switch
                                     color="primary"
                                     checked={storyIsFinished}
@@ -119,7 +121,9 @@ const StoryDetail = ({ story: fetchStory, Auth, children }: StoryDetailType): JS
                                     name="is_finished"
                                     disabled={storyIsFinished || storyFinishLoading}
                                 />
-                                { storyFinishLoading && <CircularProgress size={20} className={classes.publishedStoryLoading} /> }
+                                <>
+                                    { storyFinishLoading && <CircularProgress size={20} className={classes.publishedStoryLoading} /> }
+                                </>
                                 { storyIsFinished ? 'ဇာတ်လမ်းပြီးဆုံးပါပြီ' : 'ဇာတ်သိမ်းမည်။' }
                             </Typography>
                         }

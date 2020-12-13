@@ -1,4 +1,5 @@
 import { useDispatch } from 'react-redux'
+import { translateErrorMessage } from '../../config'
 import { logout } from '../../store/actions/authAction'
 import { addedSnackbarMessages, clearSnackbarMessage } from '../../store/actions/snackbarActions'
 import { snackMessage } from '../../store/reducers/SnackbarReducer'
@@ -53,7 +54,10 @@ export default function errorHandleHook (): any[] {
 
     const handleErrorMessage = (error: ErrorCatch, isBadRequest?: boolean) => {
       let messages: snackMessage[] = []
-      messages.push(makeErroMessate(error.message))
+      
+      messages.push(
+        makeErroMessate(error.message)
+      )
 
       if (error?.data && isArray(error?.data)) {
         error?.data?.map(errMessage => {
@@ -70,7 +74,7 @@ export default function errorHandleHook (): any[] {
 
     const makeErroMessate = (message = 'Something went wrong'): snackMessage => {
       return {
-        message ,
+        message: translateErrorMessage(message) ,
         variant: 'error'
       }
     }

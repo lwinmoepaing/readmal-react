@@ -10,6 +10,7 @@ import DefaultLayout from '../../../src/layout/DefaultLayout'
 import profileHook from '../../../src/hooks/profileHook'
 import { getEpisodeById } from '../../../src/api/episode'
 import Editor from '../../../src/components/Editor/Editor'
+import StoryBox from '../../../src/components/StoryBox/StoryBox'
 
 interface AuthorStoryDetailPageType {
     title: string,
@@ -43,7 +44,7 @@ const AuthorStoryDetailPage = ({ title, Auth, id, episode }: AuthorStoryDetailPa
                         backgroundImage={episode?.background_context_image}
                         token={user?.token}
                     />
-               ) : <h1> Context Box </h1> }
+               ) :  <StoryBox contextMessages={episode?.context} backgroundImage={episode?.background_context_image} /> }
             </DefaultLayout>
         </>
     )

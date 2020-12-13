@@ -4,11 +4,11 @@ import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import MessageIcon from '@material-ui/icons/Message'
-import ImageIcon from '@material-ui/icons/Image'
 import Character from './Character'
 import MessageEditor from './MessageEditor'
 import editorHook from '../../hooks/editorHook'
 import { contextType } from '../../../model/Context'
+import { LinearProgress } from '@material-ui/core'
 
 interface EditorProps {
     context: contextType[]
@@ -29,26 +29,27 @@ export default function Editor({context, episodeId, backgroundImage, token}: Edi
 
   return (
     <div>
-        <div className={classes.EditorContainer}>
-            <div className={tabIndicator === 'character' ? null : classes.Hidden}> 
-              <Character editorHook={useEditorHook} />
-            </div>
-            <div className={tabIndicator === 'message' ? null : classes.Hidden}> 
-              <MessageEditor editorHook={useEditorHook} />
-            </div>
-            <div className={tabIndicator === 'image' ? null : classes.Hidden}> Image Component </div>
-        </div>
+      { useEditorHook.isUpdatingEditor && <LinearProgress />}
+      <div className={classes.EditorContainer}>
+          <div className={tabIndicator === 'character' ? null : classes.Hidden}> 
+            <Character editorHook={useEditorHook} />
+          </div>
+          <div className={tabIndicator === 'message' ? null : classes.Hidden}> 
+            <MessageEditor editorHook={useEditorHook} />
+          </div>
+          <div className={tabIndicator === 'image' ? null : classes.Hidden}> Image Component </div>
+      </div>
 
-        <BottomNavigation
-          value={tabIndicator}
-          onChange={onChangeTab}
-          showLabels
-          className={[classes.bottomNavigator, 'mmFont'].join(' ')}
-        >
-            <BottomNavigationAction value="character"  label="ဇာတ်ကောင်များ" icon={<AccountCircleIcon />} />
-            <BottomNavigationAction value="message" label="စကားပြော" icon={<MessageIcon />} />
-            {/* <BottomNavigationAction value="image" label="ပုံထည့်မယ်" icon={<ImageIcon />} /> */}
-        </BottomNavigation>
+      <BottomNavigation
+        value={tabIndicator}
+        onChange={onChangeTab}
+        showLabels
+        className={[classes.bottomNavigator, 'mmFont'].join(' ')}
+      >
+          <BottomNavigationAction value="character"  label="ဇာတ်ကောင်များ" icon={<AccountCircleIcon />} />
+          <BottomNavigationAction value="message" label="စကားပြော" icon={<MessageIcon />} />
+          {/* <BottomNavigationAction value="image" label="ပုံထည့်မယ်" icon={<ImageIcon />} /> */}
+      </BottomNavigation>
     </div>
   );
 }
