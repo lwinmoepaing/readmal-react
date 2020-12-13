@@ -3,6 +3,7 @@ import { CHARACTER_COLORS } from '../../config'
 import { characterType, contextType } from '../../model/Context'
 import { makeCharacter } from '../../model/Context'
 import shortUUID from 'short-uuid'
+import errorHandleHook from './errorHandleHook'
 export interface EditorHook {
   // Background Context 
   backgroundContextImage: string
@@ -30,6 +31,9 @@ interface EditorHookProps {
 export default function editorHook ({ context = [] , episode_id,  backgroundImage}: EditorHookProps): EditorHook {
   // Background Context Image
   const [backgroundContextImage, setBackgroundContextImage] = useState<string>(backgroundImage)
+
+  // Use Error Handler Hook
+  const [ handleErrorMessage, clearMessage] = errorHandleHook()
 
   // Initial State For Characters
   const manageCharacter = context.length > 0 ? Array.from(new Set<any>(
@@ -75,14 +79,20 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
 
   // Create Characters
   const onCreateCharacter = useCallback(() => {
-    const newId = shortUUID().new()
-    
-    setCharacters([
-      ...characters,
-      makeCharacter( newId, characterName.trim(), selectedColor)
-    ])
-
-    setCharacterName('')
+    try {
+      const existingCharacter = characters.find(char => char.name === characterName.trim())
+      if (!characterName.trim()) throw new Error('ဇာတ်ကောင် နာမည်ရိုက်ထည့်ပေးပါ')
+      if (existingCharacter) throw new Error('ဇာတ်ကောင် နာမည်တူရှိပြီသားဖြစ်သည်။ ')
+      if (!selectedColor) throw new Error('အရောင်ရွေးချယ်ပေးရန် လိုအပ်သည်')
+      const newId = shortUUID().new()
+      setCharacters([
+        ...characters,
+        makeCharacter( newId, characterName.trim(), selectedColor)
+      ])
+      setCharacterName('')
+    } catch(e) {
+      handleErrorMessage(e)
+    }
   }, [characters, selectedColor, characterName])
 
   return {
