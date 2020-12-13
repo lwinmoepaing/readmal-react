@@ -44,7 +44,7 @@ export default function Editor({context, episodeId, backgroundImage}: EditorProp
             showLabels
             className={[classes.bottomNavigator, 'mmFont'].join(' ')}
         >
-            <BottomNavigationAction value="character"  label="ကာရိုက်တာ" icon={<AccountCircleIcon />} />
+            <BottomNavigationAction value="character"  label="ဇာတ်ကောင်များ" icon={<AccountCircleIcon />} />
             <BottomNavigationAction value="message" label="စကားပြော" icon={<MessageIcon />} />
             {/* <BottomNavigationAction value="image" label="ပုံထည့်မယ်" icon={<ImageIcon />} /> */}
         </BottomNavigation>
