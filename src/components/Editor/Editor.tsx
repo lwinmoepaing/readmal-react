@@ -18,7 +18,7 @@ interface EditorProps {
 
 export default function Editor({context, episodeId, backgroundImage}: EditorProps) {
   const classes = useStyles();
-  const [tabIndicator, setTabIndicator] = React.useState('character');
+  const [tabIndicator, setTabIndicator] = React.useState('message');
 
   const useEditorHook = editorHook({ context, episode_id: episodeId, backgroundImage})
 

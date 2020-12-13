@@ -26,6 +26,7 @@ export interface EditorHook {
 
   // Character Methods
   onDeleteMessage: (messageId: string) => void
+  onEditMessage: (message: contextType) => void
 }
 
 interface EditorHookProps {
@@ -121,6 +122,13 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
     setMessages(messages.filter(mes => mes.id !== mesId))
   }, [messages])
 
+  const onEditMessage = useCallback((updatedMessage: contextType) => {
+    const index = messages.findIndex(mes => mes.id === updatedMessage.id)
+    const returnMessage = [...messages]
+    returnMessage[index] = updatedMessage
+    setMessages(returnMessage)
+  }, [messages])
+
   return {
     backgroundContextImage,
 
@@ -142,5 +150,6 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
 
     // Messages Methods
     onDeleteMessage,
+    onEditMessage,
   }
 }

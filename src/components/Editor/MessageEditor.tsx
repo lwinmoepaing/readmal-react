@@ -1,4 +1,20 @@
-import { makeStyles, Chip, Avatar, FormControl, TextField, IconButton } from '@material-ui/core'
+import { 
+    makeStyles, 
+    Chip, 
+    Avatar, 
+    FormControl, 
+    TextField, 
+    IconButton, 
+    Button,
+    Dialog,
+    DialogTitle, 
+    DialogActions,
+    DialogContent, 
+    DialogContentText,
+    Radio,
+    FormLabel,
+    RadioGroup,
+    FormControlLabel } from '@material-ui/core'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import { useCallback, useState, useEffect } from 'react'
 import Grow from '@material-ui/core/Grow'
@@ -7,14 +23,14 @@ import EditIcon from '@material-ui/icons/Edit';
 import ConfirmDialog from '../common/ConfirmDialog/ConfirmDialog'
 import confirmDialogHook from '../../hooks/confirmDialogHook'
 import { EditorHook } from '../../hooks/editorHook'
+import { contextType } from '../../../model/Context'
 interface CharacterProps {
     editorHook: EditorHook
 }
 
 const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
     const classes = useStyles()
-    const { messages, backgroundContextImage, onDeleteMessage } = editorHook
-
+    const { messages, backgroundContextImage, onDeleteMessage, onEditMessage } = editorHook
 
     // Handle Delete Message
     const [deletedMessageId, setDeletedMessageId] = useState<string | null>(null)
@@ -32,6 +48,29 @@ const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
         if (val) onDeleteMessage(deletedMessageId)
     }, [deletedMessageId])
 
+    // Edited Message
+    const [editedMessage, setEditedMessage] = useState<contextType | null>(null)
+    const [openEditMessageDialog, setOpenEditMessageDialog] = useState<boolean>(false)
+
+    // When click edit button of message
+    const openEditDialog = useCallback((messageId: string) => {
+        setEditedMessage(messages.find(mes => mes.id === messageId))
+        setOpenEditMessageDialog(true)
+    }, [messages, openEditMessageDialog])
+
+    // When user input changes
+    const handleInputEditedMessage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setEditedMessage({
+            ...editedMessage,
+            [event.target.name]: event.target.value 
+        })
+    }, [editedMessage])
+
+    // Edit Message Method
+    const editMessage = useCallback(() => {
+        onEditMessage(editedMessage)
+        setOpenEditMessageDialog(false)
+    }, [editedMessage])
 
     return (
         <div className={classes.Wrapper}>
@@ -62,7 +101,7 @@ const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
                                     <IconButton aria-label="delete" size="small" className={classes.messageActionButton}  style={{backgroundColor: '#ff7675'}} onClick={() => handleDeleteMessage(mes?.id)}>
                                         <DeleteIcon fontSize="inherit" />
                                     </IconButton>
-                                    <IconButton aria-label="edit" size="small" className={classes.messageActionButton}  style={{backgroundColor: '#00b894'}} >
+                                    <IconButton aria-label="edit" size="small" className={classes.messageActionButton}  style={{backgroundColor: '#00b894'}} onClick={() => openEditDialog(mes?.id)}>
                                         <EditIcon fontSize="inherit" />
                                     </IconButton>
                                 </div>
@@ -91,6 +130,48 @@ const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
             </div>
         
             <ConfirmDialog confirmDialogHook={useConfirmDialogHook} onConfirm={deleteMessage}/>
+            
+            <Dialog aria-labelledby="Edit-Message-Dialog" open={openEditMessageDialog} fullWidth >
+                <DialogTitle id="Edit-Message-Dialog"> စာသားကို ပြုပြင်မည် </DialogTitle>
+                <DialogContent>
+
+                    <FormControl size="small" fullWidth={true}>
+                        <TextField
+                            label="ပြုပြင်ရန် စာသားရိုက်ပါ"
+                            variant="outlined"
+                            className="mmFont"
+                            size="small"
+                            name="message"
+                            value={editedMessage?.message}
+                            onChange={handleInputEditedMessage}
+                        />
+                    </FormControl>
+
+                    <FormControl component="fieldset" fullWidth>
+                        <RadioGroup 
+                            row
+                            aria-label="context_position"
+                            color="primary"
+                            name="context_position"
+                            value={editedMessage?.context_position}
+                            onChange={handleInputEditedMessage}
+                        >
+                            <FormControlLabel value="LEFT" control={<Radio color="primary" />} label="ဘယ်ဘက်" />
+                            <FormControlLabel value="CENTER" control={<Radio color="primary" />} label="အလယ်နေရာ" />
+                            <FormControlLabel value="RIGHT" control={<Radio color="primary" />} label="ညာဘက်" />
+                        </RadioGroup>
+                    </FormControl>
+                </DialogContent>
+                <DialogActions>
+                    <Button color="default" variant="outlined" fullWidth={true} onClick={() => setOpenEditMessageDialog(false)}>
+                        မလုပ်ဆောင်ပါ
+                    </Button>
+                    <Button color="primary" disabled={!editedMessage?.message?.trim()} variant="contained" fullWidth={true} onClick={editMessage}>
+                        လုပ်ဆောင်မည်
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
         </div>
     )
 }
