@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react' 
 import { CHARACTER_COLORS } from '../../config'
-import { characterType, contextType } from '../../model/Context'
+import { characterType, contextType, makeContext, Character, Context } from '../../model/Context'
 import { makeCharacter } from '../../model/Context'
 import shortUUID from 'short-uuid'
 import errorHandleHook from './errorHandleHook'
@@ -20,6 +20,7 @@ export interface EditorHook {
   onDeleteCharacter: (characterId: string) => void
   onChangeCharacterName(event: React.ChangeEvent<HTMLInputElement>) : void
   onCreateCharacter: () => void
+  onSelectedCharacter: (characterId: string) => void
 
   // Messages Data
   messages: contextType[]
@@ -27,6 +28,7 @@ export interface EditorHook {
   // Character Methods
   onDeleteMessage: (messageId: string) => void
   onEditMessage: (message: contextType, serialNumber?: number) => void
+  onCreateMessage: (inputValue: string, position: 'LEFT' | 'RIGHT' | 'CENTER') => void
 }
 
 interface EditorHookProps {
@@ -77,7 +79,6 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
    * All Characters Methods
    */
 
-
   // When Fab Color Icon Selected
   const onSelectColor = useCallback((val: string) :void => {
     setSelectedColor(val === selectedColor ? null : val)
@@ -87,7 +88,8 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
   const onDeleteCharacter = useCallback((charId: string) => {
     setCharacters(characters.filter(char => char.id !== charId))
     setMessages(prev => prev.filter(message => message.character.id !== charId))
-  }, [characters, messages])
+    if (selectedCharacter?.id === charId) setSelectedCharacter(null)
+  }, [characters, messages, selectedCharacter])
 
   // When Character Form on Change
   const onChangeCharacterName = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,6 +115,11 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
     }
   }, [characters, selectedColor, characterName])
 
+  // On Selected Character, when user select to add new messages , eg. Left, right, center thining message
+  const onSelectedCharacter = useCallback((charId: string) => {
+    setSelectedCharacter(characters.find(char => char.id === charId))
+  }, [characters, selectedCharacter])
+
   /**
    * All Messages Methods
    */
@@ -126,6 +133,9 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
     const index = messages.findIndex(mes => mes.id === updatedMessage.id)
     // Af first we make updateMessage
     let returnMessage = [...messages]
+    if (updatedMessage.context_position === 'CENTER') {
+      updatedMessage.type = 'THINKING_MESSAGE'
+    }
     returnMessage[index] = updatedMessage
     
     // If We need to change Position
@@ -141,14 +151,27 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
       returnMessage = [ updatedMessage, ...removeUpdateMessages]
     } else if ( isNeedToChangePosition ) {
       // If Between two values
-      // updatedMessage = updatedMessage.filter(
-      //   (mes) => mes.id !== changeMessage.id
-      // )
       returnMessage = [...removeUpdateMessages]
       returnMessage.splice(changePosition, 0, updatedMessage)
     }
     setMessages(returnMessage)
   }, [messages])
+
+  const onCreateMessage = useCallback(( inputMessage: string, position: 'LEFT' | 'RIGHT' | 'CENTER') => {
+    try {
+      if (!selectedCharacter) throw new Error('ဇာတ်ကောင်ရွေးရန်လိုအပ်ပါသည်')
+      if (!inputMessage.trim()) throw new Error('စာသားကို ရိုက်ထည့်ပေးရန်လိုအပ်ပါသည်')
+
+      const character = new Character(selectedCharacter)
+      const newContext = new Context(makeContext(null, inputMessage, character, position))
+
+      setMessages([... messages, newContext])
+
+    } catch (e) {
+      handleErrorMessage(e)
+      throw (e)
+    }
+  }, [messages, selectedCharacter])
 
   return {
     backgroundContextImage,
@@ -165,6 +188,7 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
     onDeleteCharacter,
     onChangeCharacterName,
     onCreateCharacter,
+    onSelectedCharacter,
     
     // Messages Data
     messages,
@@ -172,5 +196,6 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
     // Messages Methods
     onDeleteMessage,
     onEditMessage,
+    onCreateMessage,
   }
 }

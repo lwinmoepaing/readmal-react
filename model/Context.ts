@@ -10,7 +10,7 @@ export interface contextType {
     id: string,
 	type: string,
 	message: string,
-	context_position: "left" | "center" | "right",
+	context_position: "LEFT" | "CENTER" | "RIGHT",
     context_url: string,
     has_audio: boolean,
     audio_url: string,
@@ -36,7 +36,7 @@ export class Context implements contextType {
     id: string
     type: string
     message: string
-    context_position: "left" | "center" | "right"
+    context_position: "LEFT" | "CENTER" | "RIGHT"
     context_url: string
     has_audio: boolean
     audio_url: string
@@ -52,7 +52,7 @@ export class Context implements contextType {
         id,
         type = 'MESSAGE',
         message = '',
-        context_position = 'left',
+        context_position = 'LEFT',
         context_url = '',
         has_audio = false,
         audio_url = '',
@@ -80,7 +80,7 @@ export const makeContext = (
     id: string ,
     message: string,
     character: characterType,
-    context_position: string = 'left',
+    context_position: 'LEFT' | 'RIGHT' | 'CENTER' = 'LEFT',
     type: string = 'MESSAGE',
     context_url: string = '',
     is_theme_change: boolean = false,
@@ -93,7 +93,7 @@ export const makeContext = (
         id,
         type,
         message,
-        context_position: context_position?.toLowerCase(),
+        context_position: context_position?.toUpperCase(),
         context_url,
         is_theme_change,
         is_theme_change_url,

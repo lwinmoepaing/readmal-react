@@ -88,7 +88,7 @@ export default function DefaultLayout({ children, Auth, title = 'ReadMal' }: Def
         })}
       >
         <div className={classes.drawerHeader} />
-        <Container>
+        <Container fixed>
           { children }
         </Container>
       </main>

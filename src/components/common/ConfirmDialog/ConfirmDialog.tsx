@@ -30,7 +30,7 @@ export default function ConfirmDialog({confirmDialogHook, onConfirm}: ConfirmDia
       } = confirmDialogHook
     
   return (
-    <Dialog aria-labelledby="Confirm-Dialog" open={isOpenConfirmDialog}>
+    <Dialog aria-labelledby="Confirm-Dialog" open={isOpenConfirmDialog} fullWidth>
         <DialogTitle id="Confirm-Dialog">{ confirmDialogTitle }</DialogTitle>
         <DialogContent>
             <DialogContentText>

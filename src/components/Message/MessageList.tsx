@@ -67,19 +67,19 @@ const useStyle = makeStyles((theme) => ({
         border: '1px solid #dfdfdf',
         padding: '.5rem',
     },
-    position_left: {
+    position_LEFT: {
         marginRight: 'auto',
         textAlign: 'left',
         borderBottomLeftRadius: 0,
         justifyContent: 'flex-start'
     },
-    position_center: {
+    position_CENTER: {
         marginRight: 'auto',
         marginLeft: 'auto',
         textAlign: 'center',
         justifyContent: 'center'
     },
-    position_right: {
+    position_RIGHT: {
         marginLeft: 'auto',
         textAlign: 'right',
         borderBottomRightRadius: 0,

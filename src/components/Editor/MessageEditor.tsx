@@ -10,17 +10,18 @@ import {
     DialogTitle, 
     DialogActions,
     DialogContent, 
-    DialogContentText,
     Radio,
-    FormLabel,
+    InputAdornment,
     RadioGroup,
-    Input,
+    MenuItem,
     FormControlLabel } from '@material-ui/core'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState, useEffect, createRef } from 'react'
 import Grow from '@material-ui/core/Grow'
 import DeleteIcon from '@material-ui/icons/Delete'
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from '@material-ui/icons/Edit'
+import ForwardIcon from '@material-ui/icons/Forward'
+
 import ConfirmDialog from '../common/ConfirmDialog/ConfirmDialog'
 import confirmDialogHook from '../../hooks/confirmDialogHook'
 import { EditorHook } from '../../hooks/editorHook'
@@ -31,7 +32,28 @@ interface CharacterProps {
 
 const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
     const classes = useStyles()
-    const { messages, backgroundContextImage, onDeleteMessage, onEditMessage } = editorHook
+    const {
+        selectedCharacter, 
+        characters, 
+        messages, 
+        backgroundContextImage, 
+        onDeleteMessage,
+        onSelectedCharacter, 
+        onEditMessage,
+        onCreateMessage } = editorHook
+    
+    // Message List Reference
+    const scrollDownTolist = useCallback(() => {
+        setTimeout(() => {
+            const listScrollDown = document.getElementById('ListMessageEditor')
+            listScrollDown.scrollTop = listScrollDown.scrollHeight
+        }, 50)
+    }, [])
+    
+    // Handle Selected Character to add new messages
+    const selectedChracterBox = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        onSelectedCharacter(event.target.value);
+    }, [characters])
 
     // Handle Delete Message
     const [deletedMessageId, setDeletedMessageId] = useState<string | null>(null)
@@ -49,7 +71,7 @@ const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
         if (val) onDeleteMessage(deletedMessageId)
     }, [deletedMessageId])
 
-    // Edited Message
+    // Edited Dialog Message
     const [editedMessage, setEditedMessage] = useState<contextType | null>(null)
     const [editedMessageSerial, setEditedMessageSerial] = useState<number>(0)
     const [openEditMessageDialog, setOpenEditMessageDialog] = useState<boolean>(false)
@@ -61,7 +83,7 @@ const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
         setOpenEditMessageDialog(true)
     }, [messages, openEditMessageDialog])
 
-    // When user input changes
+    // When User Input Edidted Dialog Message
     const handleInputEditedMessage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setEditedMessage({
             ...editedMessage,
@@ -69,24 +91,55 @@ const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
         })
     }, [editedMessage])
 
-    // Edit Message Method
+    // On Edit (Edidted Dialog Message) 
     const editMessage = useCallback(() => {
         onEditMessage(editedMessage, editedMessageSerial)
         setOpenEditMessageDialog(false)
     }, [editedMessage, editedMessageSerial])
 
-    // Min and Max EditedMessage Index Handler
+    // Min and Max Edited Dialog Message Index Handler
     const handleOnChangeEditedMessageIndex = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         const serialNumber = +event.target.value
         if (serialNumber <= 0 || serialNumber  > messages.length) return
         setEditedMessageSerial(serialNumber)
     }, [messages])
 
+    /**
+     * New Message Added Data
+     */
+    const [ inputMessage, setInputMessage ] = useState<string>('')
+
+    const handleNewMessageInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputMessage(event.target.value)
+    }, [inputMessage])
+
+    // When Click Add New Message (Left arrow or Right arrow)
+    const addNewMessage = useCallback((val: 'LEFT' | 'RIGHT' | 'CENTER') => {
+        try {
+            onCreateMessage(inputMessage, val)
+            setInputMessage('')
+            scrollDownTolist()
+        } catch (e) {
+
+        }
+    }, [inputMessage, selectedCharacter])
+
+    const onEnterKeyNewMessageInput = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter' && event.shiftKey) {
+            addNewMessage('RIGHT')
+            return
+        }
+        if (event?.code === 'Enter' || event?.key === 'Enter') {
+            addNewMessage('LEFT')
+            return
+        }
+    }, [inputMessage, addNewMessage])
+
     return (
         <div className={classes.Wrapper}>
             {/* Background Image */}
             <img className={classes.backgroundImage} src={backgroundContextImage} />
-            <div className={classes.messageContainer}>
+            <div className={classes.messageContainer} id="ListMessageEditor">
                 {
                     messages.map((mes, index) => (
                         <Grow in={true} key={mes?.id}>
@@ -133,14 +186,56 @@ const MessageEditor = ({editorHook}: CharacterProps): JSX.Element => {
                     ))
                 }
             </div>
-
+            
+            {/* Button Input Message and Select Character Box */}
             <div className={classes.bottonContainer}>
-                <div>Choose Character Component</div>
-                <div>Add Character Input Component</div>
+                <TextField
+                    size="small"
+                    variant="outlined"
+                    className="mmFont"
+                    label="ဇာတ်ကောင်ရွေးမယ်"
+                    select
+                    value={selectedCharacter?.id ?? ''}
+                    onChange={selectedChracterBox}
+                    fullWidth
+                >
+                    {characters?.map((char) => (
+                        <MenuItem key={`${char.id}_${char.name}`} value={char.id}>
+                            {char.name}
+                        </MenuItem>
+                    ))}
+                </TextField>
+                
+                <TextField
+                    size="small"
+                    variant="outlined"
+                    value={inputMessage}
+                    onChange={handleNewMessageInput}
+                    fullWidth
+                    onKeyUp={onEnterKeyNewMessageInput}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton color="primary" onClick={() => addNewMessage('LEFT')}>
+                                    <ForwardIcon className={classes.reverseIcon} />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton color="primary" onClick={() => addNewMessage('RIGHT')} >
+                                    <ForwardIcon />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
             </div>
-        
+            
+            {/* Message Delete or not Confirm dialog */}
             <ConfirmDialog confirmDialogHook={useConfirmDialogHook} onConfirm={deleteMessage}/>
             
+            {/* Message Edit Dialog */}
             <Dialog aria-labelledby="Edit-Message-Dialog" open={openEditMessageDialog} fullWidth >
                 <DialogTitle id="Edit-Message-Dialog"> စာသားကို ပြုပြင်မည် </DialogTitle>
                 <DialogContent>
@@ -216,7 +311,7 @@ const useStyles = makeStyles((theme) => ({
     messageContainer: {
         height: '100%',
         overflowY: 'auto',
-        paddingBottom: 53
+        paddingBottom: 84
     },
 
     backgroundImage: {
@@ -299,9 +394,13 @@ const useStyles = makeStyles((theme) => ({
         left: 0,
         right: 0,
         width: '100%',
-        height: 51,
+        height: 81,
         background: '#3e3e3e'
     },
+
+    reverseIcon: {
+        transform: `rotate(180deg)`
+    }
     
 }));
 
