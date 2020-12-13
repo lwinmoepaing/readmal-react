@@ -20,6 +20,12 @@ export interface EditorHook {
   onDeleteCharacter: (characterId: string) => void
   onChangeCharacterName(event: React.ChangeEvent<HTMLInputElement>) : void
   onCreateCharacter: () => void
+
+  // Messages Data
+  messages: contextType[]
+
+  // Character Methods
+  onDeleteMessage: (messageId: string) => void
 }
 
 interface EditorHookProps {
@@ -35,12 +41,14 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
   // Use Error Handler Hook
   const [ handleErrorMessage, clearMessage] = errorHandleHook()
 
+  /**
+   *  Characters Data
+   */
   // Initial State For Characters
   const manageCharacter = context.length > 0 ? Array.from(new Set<any>(
       context.map(mes => JSON.stringify(mes.character)))
     ).map(cha => JSON.parse(cha)) 
     : []
-  
   const [characterName, setCharacterName] = useState<string>('')
   const [characters, setCharacters] = useState<characterType[]>([...manageCharacter])
   const [selectedCharacter, setSelectedCharacter] = useState<characterType | null >(null)
@@ -50,6 +58,10 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
   const [colors, setColors] = useState<string[]>(manageColors)
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
 
+  /**
+   * Message Datas
+   */
+  const [messages, setMessages] = useState<contextType[]>(context)
 
   // Charcters Changes
   // Color changes, eg, when remove users we need add old colorSet
@@ -60,7 +72,11 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
     setSelectedColor(null)
   }, [characters])
 
-  // Characters Methods
+  /**
+   * All Characters Methods
+   */
+
+
   // When Fab Color Icon Selected
   const onSelectColor = useCallback((val: string) :void => {
     setSelectedColor(val === selectedColor ? null : val)
@@ -69,7 +85,8 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
   // When Author Delete Character
   const onDeleteCharacter = useCallback((charId: string) => {
     setCharacters(characters.filter(char => char.id !== charId))
-  }, [characters])
+    setMessages(prev => prev.filter(message => message.character.id !== charId))
+  }, [characters, messages])
 
   // When Character Form on Change
   const onChangeCharacterName = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +112,15 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
     }
   }, [characters, selectedColor, characterName])
 
+  /**
+   * All Messages Methods
+   */
+
+  // When Author Delete Message
+  const onDeleteMessage = useCallback((mesId: string) => {
+    setMessages(messages.filter(mes => mes.id !== mesId))
+  }, [messages])
+
   return {
     backgroundContextImage,
 
@@ -109,6 +135,12 @@ export default function editorHook ({ context = [] , episode_id,  backgroundImag
     onSelectColor,
     onDeleteCharacter,
     onChangeCharacterName,
-    onCreateCharacter
+    onCreateCharacter,
+    
+    // Messages Data
+    messages,
+
+    // Messages Methods
+    onDeleteMessage,
   }
 }

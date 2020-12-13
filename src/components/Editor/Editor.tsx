@@ -6,6 +6,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import MessageIcon from '@material-ui/icons/Message'
 import ImageIcon from '@material-ui/icons/Image'
 import Character from './Character'
+import MessageEditor from './MessageEditor'
 import editorHook from '../../hooks/editorHook'
 import { contextType } from '../../../model/Context'
 
@@ -29,9 +30,11 @@ export default function Editor({context, episodeId, backgroundImage}: EditorProp
     <div>
         <div className={classes.EditorContainer}>
             <div className={tabIndicator === 'character' ? null : classes.Hidden}> 
-                <Character editorHook={useEditorHook} />
+              <Character editorHook={useEditorHook} />
             </div>
-            <div className={tabIndicator === 'message' ? null : classes.Hidden}> Message Component </div>
+            <div className={tabIndicator === 'message' ? null : classes.Hidden}> 
+              <MessageEditor editorHook={useEditorHook} />
+            </div>
             <div className={tabIndicator === 'image' ? null : classes.Hidden}> Image Component </div>
         </div>
 
@@ -43,7 +46,7 @@ export default function Editor({context, episodeId, backgroundImage}: EditorProp
         >
             <BottomNavigationAction value="character"  label="ကာရိုက်တာ" icon={<AccountCircleIcon />} />
             <BottomNavigationAction value="message" label="စကားပြော" icon={<MessageIcon />} />
-            <BottomNavigationAction value="image" label="ပုံထည့်မယ်" icon={<ImageIcon />} />
+            {/* <BottomNavigationAction value="image" label="ပုံထည့်မယ်" icon={<ImageIcon />} /> */}
         </BottomNavigation>
     </div>
   );

@@ -25,7 +25,7 @@ const MessageList = (props: MessageListType) => {
     ].join(' ')
 
     return (
-        <Grow  in={true}>
+        <Grow in={true}>
             <div className={classes.messageGroupWrapper}>
                 <div className={dynamicClass}>
                     <p className={dynamiceMessageClass}>
