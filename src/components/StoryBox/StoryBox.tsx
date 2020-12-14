@@ -6,11 +6,13 @@ import { makeStyles } from '@material-ui/core'
 export interface StoryBoxProps {
     contextMessages: contextType[]
     backgroundImage: string
+    size?: "small" | "large"
 }
 
 const StoryBox = ({
     contextMessages,
-    backgroundImage
+    backgroundImage,
+    size = "small"
 }: StoryBoxProps): JSX.Element => {
     const classes = useStyles()
 
@@ -50,7 +52,7 @@ const StoryBox = ({
     }, [messages, touchMessages])
 
     return (
-        <div className={classes.container} onClick={increaseTouchMessage} >
+        <div className={[classes.container, classes[`container_${size}`]].join(' ')} onClick={increaseTouchMessage} >
             <img className={classes.backgroundImage} src={backgroundImage} />
             <div className={classes.storyContainer} id="StoryBoxComponent">
                 {
@@ -69,7 +71,6 @@ const useStyles = makeStyles(() => ({
         maxWidth: 500,
         margin: '0 auto',
         borderRadius: 8,
-        height: `calc(100vh - 105px)`,
         overflow: 'hidden',
         cursor: 'pointer',
         backgroundSize: 'cover',
@@ -77,6 +78,15 @@ const useStyles = makeStyles(() => ({
         backgroundPosition: 'center center',
         position: 'relative',
         border: '1px solid #434343'
+    },
+
+    container_small: {
+        height: `calc(100vh - 105px)`,
+    },
+
+    container_large: {
+        height: `calc(100vh - 20px)`,
+        margin: '5px auto'
     },
 
     backgroundImage: {

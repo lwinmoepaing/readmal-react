@@ -24,11 +24,11 @@ const StoryDetailPublicPage = ({ title, episode, id } : StoryDetailPublicPagePro
         <meta property="og:image" content={episode?.image ? episode.image : '/logo.png'} />
       </Head>
       <Container> 
-        { !!episode && <Typography variant="h6" component="h6"> Episode is not found </Typography> }
+        { !episode && <Typography variant="h6" component="h6"> Episode is not found </Typography> }
         { !!episode && !episode?.is_published && <Typography variant="h6" component="h6"> ရေးသားနေဆဲဖြစ်သည်။ </Typography> }
         { !!episode && episode?.is_published &&
             <>
-                <StoryBox contextMessages={episode?.context} backgroundImage={episode?.background_context_image} />
+                <StoryBox contextMessages={episode?.context} backgroundImage={episode?.background_context_image} size="large" />
             </>
         }
       </Container>
