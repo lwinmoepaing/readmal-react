@@ -5,6 +5,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { Avatar, Backdrop, Chip, Switch, Typography } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
+import {FacebookShareButton, FacebookIcon} from "react-share"
 import storyDetailHook from '../../hooks/storyDetailHook'
 import { AuthReducerType } from '../../../store/reducers/AuthReducer'
 import StoryDetailEpisodeItem from './StoryDetailEpisodeItem'
@@ -94,23 +95,39 @@ const StoryDetail = ({ story: fetchStory, Auth, children }: StoryDetailType): JS
                             variant="outlined"
                         />
 
-                        <Typography variant="h6" component="h6" className={classes.textLineHeight}>
+                        <Typography variant="body2" component="p" className={classes.textLineHeight}>
                             {story?.description}
                         </Typography>
 
-                        <Typography component={'div'} variant="body2" className={classes.textLineHeight}>
-                            <Switch
-                                color="primary"
-                                checked={storyIsPublished}
-                                onChange={() => handleChangeStatus('published')}
-                                name="is_published"
-                                disabled={storyIsPublished || storyPublishLoading}
-                            />
-                            <>
-                                { storyPublishLoading && <CircularProgress size={20} className={classes.publishedStoryLoading} /> }
-                            </>
-                            Publish { storyIsPublished ? 'တင်ပြီးပါပြီ' : 'တင်မည်' }
+                        <Typography variant="body2" component="p" className={classes.textLineHeight}>
+                            စာရေးသူ  {story?.author?.name}
                         </Typography>
+
+                        <FacebookShareButton 
+                            url={`https://readmal.com/story/${story?._id}`}
+                            quote={`Readmal မှာ ဖတ်မယ်(${story?.title}) စာရေးသူ ${story?.author?.name}`}
+                            hashtag="#ReadMal"
+                            className={classes.fbIcon}
+                        >
+                            <FacebookIcon size={28} />
+                        </FacebookShareButton>
+
+                        {
+                            accessPermission && 
+                            <Typography component={'div'} variant="body2" className={classes.textLineHeight}>
+                                <Switch
+                                    color="primary"
+                                    checked={storyIsPublished}
+                                    onChange={() => handleChangeStatus('published')}
+                                    name="is_published"
+                                    disabled={storyIsPublished || storyPublishLoading}
+                                />
+                                <>
+                                    { storyPublishLoading && <CircularProgress size={20} className={classes.publishedStoryLoading} /> }
+                                </>
+                                Publish { storyIsPublished ? 'တင်ပြီးပါပြီ' : 'တင်မည်' }
+                            </Typography>
+                        }
 
                         { accessPermission && storyIsPublished && !storyIsFinished && 
                             <Typography component={'div'} variant="body2" className={classes.textLineHeight}>
@@ -152,7 +169,7 @@ const StoryDetail = ({ story: fetchStory, Auth, children }: StoryDetailType): JS
             <Grid container spacing={3} className={classes.episodeContainerr}>
                 { 
                     story?.episodes
-                     ?.sort((a, b) => b?.episode_number - a?.episode_number )
+                     ?.sort((a, b) => accessPermission ? b?.episode_number - a?.episode_number :  a?.episode_number - b?.episode_number )
                      ?.map(episode =>
                         <Grid item xs={12} sm={4} key={episode?._id} >
                             <StoryDetailEpisodeItem
@@ -165,7 +182,7 @@ const StoryDetail = ({ story: fetchStory, Auth, children }: StoryDetailType): JS
                                 accessModify={accessPermission}
 
                                 publishEpisode={publishEpisode}
-                                goEpisodeRoute='/author/episode'
+                                goEpisodeRoute={Auth?.authInfo?.role ? `/${Auth?.authInfo?.role?.toLowerCase()}/episode` : '/episode'} 
                             />
                         </Grid>    
                     )
@@ -228,7 +245,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
     episodeContainerr: {
         marginTop: '1rem'
-    }
+    },
+
+    fbIcon: {
+        display: 'block',
+        width: '95%', 
+        maxWidth: 160,
+        backgroundColor: 'rgb(59, 89, 152)!important',
+        borderRadius: 6,
+        height: 29,
+        margin: '.3rem 0'
+      },
   }),
 );
 

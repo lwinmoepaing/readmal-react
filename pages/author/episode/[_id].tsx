@@ -39,7 +39,7 @@ const AuthorStoryDetailPage = ({ title, Auth, id, episode }: AuthorStoryDetailPa
                { !episode &&  <Typography variant="h6" component="h6"> Episode is not found </Typography> }
                { showEditor ? (
                     <Editor
-                        context={episode?.snap_context}
+                        context={episode?.snap_context ?? []}
                         episodeId={episode?._id}
                         backgroundImage={episode?.background_context_image}
                         token={user?.token}

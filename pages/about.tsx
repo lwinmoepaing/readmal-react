@@ -17,8 +17,10 @@ const AboutPage = ({ title, isAuth } : AboutPageProps) => {
   return (
     <>
       <Head>
-        <title>{ title }</title>
+        <title>{title}</title>
         <meta property="og:title" content={title} key={title} />
+        <meta property="og:description" content="Readmal Modern Touch Story Platform, Enjoy it now!" />
+        <meta property="og:image" content="/logo.png" />
       </Head>
       <Container> 
         <About />

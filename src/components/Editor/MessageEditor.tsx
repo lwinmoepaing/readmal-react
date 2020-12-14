@@ -309,9 +309,8 @@ const useStyles = makeStyles((theme) => ({
     },
 
     messageContainer: {
-        height: '100%',
+        height: `calc(100% - 80px)`,
         overflowY: 'auto',
-        paddingBottom: 84
     },
 
     backgroundImage: {
