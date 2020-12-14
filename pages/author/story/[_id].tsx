@@ -10,6 +10,7 @@ import DefaultLayout from '../../../src/layout/DefaultLayout'
 import profileHook from '../../../src/hooks/profileHook'
 import { getStoryById } from '../../../src/api/story'
 import StoryDetail from '../../../src/components/Story/StoryDetail'
+import BackButton from '../../../src/components/common/BackButton/BackButton'
 
 interface AuthorStoryDetailPageType {
     title: string,
@@ -32,7 +33,9 @@ const AuthorStoryDetailPage = ({ title, Auth, id, story }: AuthorStoryDetailPage
                { !story &&  <Typography variant="h6" component="h6"> Story Id: {id} is not found </Typography> }
                { story && 
                     <>
-                        <StoryDetail story={story} Auth={user} />
+                        <StoryDetail story={story} Auth={user}>
+                            <BackButton />
+                        </StoryDetail>
                     </>
                }
             </DefaultLayout>

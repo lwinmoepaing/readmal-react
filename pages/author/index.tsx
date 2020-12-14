@@ -11,6 +11,8 @@ import storyFormHook from '../../src/hooks/storyFormHook'
 import StoryCardSwiper from '../../src/components/Story/StoryCardSwiper'
 import StoryFormDialog from '../../src/components/Story/StoryFormDialog'
 import { Typography } from '@material-ui/core'
+import EmptyStory from '../../src/components/common/Empty/EmptyStory'
+import FoxLoading from '../../src/components/common/loading/FoxLoading'
 
 interface MeType {
     title: string,
@@ -64,13 +66,31 @@ const AuthorIndexPage = ({ title, Auth }: MeType) => {
             />
         </StoryCardSwiper> )
         :
-        ( <Typography variant="h6" component="h6" className="mmFont">
-            နောက်ဆုံး Story များ  <StoryFormDialog
-                isShowCreateButton={true}
-                storyFormHook={storyformHook}
-                onCreateStorySuccess={addedNewStory}
-            />
-        </Typography> )
+        ( 
+            <>
+                <Typography variant="h6" component="h6" className="mmFont">
+                    နောက်ဆုံး Story များ  
+                    <StoryFormDialog
+                        isShowCreateButton={true}
+                        storyFormHook={storyformHook}
+                        onCreateStorySuccess={addedNewStory}
+                    />
+                </Typography> 
+                { storyLoading ? 
+                    (
+                        <div style={{
+                            padding: '1.9rem',
+                            margin: '.8rem 0',
+                            background: '#2b2b2b',
+                            borderRadius: '1rem',
+                        }}>
+                            <FoxLoading />
+                        </div>
+                    ): 
+                    <EmptyStory type="welcome" title="Story မရှိသေးပါ။" />
+                }
+            </>
+        )
 
     return (
         <>

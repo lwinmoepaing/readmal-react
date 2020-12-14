@@ -74,6 +74,7 @@ export default function StoryFormDialog(
 
   return (
     <>
+      { ' ' }
       {
         isShowCreateButton &&
         <Button variant="outlined" color="primary" onClick={handleClickOpen} className="mmFont">

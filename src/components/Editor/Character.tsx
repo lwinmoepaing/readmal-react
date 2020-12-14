@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button'
 import ConfirmDialog from '../common/ConfirmDialog/ConfirmDialog'
 import confirmDialogHook from '../../hooks/confirmDialogHook'
 import { useCallback, useState } from 'react'
+import BackButton from '../common/BackButton/BackButton'
 
 interface CharacterProps {
     editorHook: EditorHook
@@ -117,6 +118,10 @@ const Character = ({editorHook}: CharacterProps): JSX.Element => {
                             ) : <ColorizeIcon />}
                         </Fab>))
                     }
+
+                    <div className={classes.backbtnContainer}>
+                        <BackButton />
+                    </div>
                 </Grid>
             </Grid>
         
@@ -137,6 +142,9 @@ const useStyles = makeStyles((theme) => ({
     },
     selectedCharacterContainer: {
         textAlign: 'center', borderBottom: '1px solid #464646', marginBottom: 8, paddingBottom: 4
+    },
+    backbtnContainer: {
+        margin: '.3rem 0'
     }
 }));
 

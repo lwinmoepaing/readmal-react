@@ -9,6 +9,7 @@ import AuthenticateMiddleware from '../../middleware/isAuthenticate'
 import { AuthReducerType } from '../../store/reducers/AuthReducer'
 import DefaultLayout from '../../src/layout/DefaultLayout'
 import profileHook from '../../src/hooks/profileHook'
+import About from '../../src/components/common/About/About'
 
 interface AuthorAboutPageType {
     title: string,
@@ -28,9 +29,7 @@ const AuthorAboutPage = ({ title, Auth }: AuthorAboutPageType) => {
             </Head>
 
             <DefaultLayout Auth={user}>
-               <Typography variant="body2">
-                  About Page
-               </Typography>
+               <About />
             </DefaultLayout>
                 
         </>

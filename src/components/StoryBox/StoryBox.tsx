@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react'
-import Grid from '@material-ui/core/Grid'
 import { Context, contextType } from '../../../model/Context'
 import MessageList from '../Message/MessageList'
 import { makeStyles } from '@material-ui/core'
@@ -51,9 +50,9 @@ const StoryBox = ({
     }, [messages, touchMessages])
 
     return (
-        <div className={classes.container} onClick={increaseTouchMessage} id="StoryBoxComponent">
+        <div className={classes.container} onClick={increaseTouchMessage} >
             <img className={classes.backgroundImage} src={backgroundImage} />
-            <div>
+            <div className={classes.storyContainer} id="StoryBoxComponent">
                 {
                     touchMessages &&
                     touchMessages.map(
@@ -71,8 +70,7 @@ const useStyles = makeStyles(() => ({
         margin: '0 auto',
         borderRadius: 8,
         height: `calc(100vh - 105px)`,
-        overflowX: 'hidden',
-        overflowY: 'auto',
+        overflow: 'hidden',
         cursor: 'pointer',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
@@ -91,6 +89,11 @@ const useStyles = makeStyles(() => ({
         zIndex: -1,
         opacity: '0.37',
     },
+
+    storyContainer: {
+        height: `calc(100vh - 105px)`,
+        overflowY: 'auto',
+    }
 }))
 
 export default StoryBox

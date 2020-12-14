@@ -121,6 +121,10 @@ export const translateErrorMessage = (mes: string): string => {
      if (mes === '"description" is not allowed to be empty') {
           returnMessage = 'အကြောင်းအရာ ထည့်ပေးရန်လိုအပ်ပါသည်။'
      }
+
+     if (mes === 'Story has no episodes') {
+          returnMessage = 'Story တွင် အပိုင်းလုံး၀ မရှိသေးပါ။'
+     }
      
      return returnMessage
 }
