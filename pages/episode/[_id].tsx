@@ -45,8 +45,9 @@ StoryDetailPublicPage.getInitialProps = async ( context: NextPageContext) => {
             const res = await responseEpisode.json()
             episode = res.data
         }
-    } catch {
-
+        
+    } catch (e) {
+      console.log(e)
     }
     return  {
         title: `${episode?.title}`,

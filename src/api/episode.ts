@@ -7,8 +7,12 @@ export const getEpisodeById = (episode_id: string | string[], token?: string) =>
         method: 'GET',
         headers: { 
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
         },
     }
+
+    if (token) {
+        options.headers['Authorization'] = `Bearer ${token}`
+    }
+
     return fetch(url, options)
 }

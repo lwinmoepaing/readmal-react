@@ -51,8 +51,10 @@ const StoryBox = ({
       })
     }, [messages, touchMessages])
 
+    const containerStyle = [classes.container, classes[`container_${size}`]].join(' ')
+
     return (
-        <div className={[classes.container, classes[`container_${size}`]].join(' ')} onClick={increaseTouchMessage} >
+        <div className={containerStyle} onClick={increaseTouchMessage} >
             <img className={classes.backgroundImage} src={backgroundImage} />
             <div className={classes.storyContainer} id="StoryBoxComponent">
                 {
@@ -70,13 +72,12 @@ const useStyles = makeStyles(() => ({
     container: {
         maxWidth: 500,
         margin: '0 auto',
+        position: 'relative',
         borderRadius: 8,
         overflow: 'hidden',
-        cursor: 'pointer',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center center',
-        position: 'relative',
         border: '1px solid #434343'
     },
 
