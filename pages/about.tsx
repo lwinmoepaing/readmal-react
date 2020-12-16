@@ -7,6 +7,7 @@ import { Container } from "@material-ui/core"
 // Redux
 import AuthenticateMiddleware from "../middleware/isAuthenticate"
 import About from '../src/components/common/About/About'
+import { BASE_URL } from "../config"
 
 interface AboutPageProps {
   title: string,
@@ -20,7 +21,7 @@ const AboutPage = ({ title, isAuth } : AboutPageProps) => {
         <title>{title}</title>
         <meta property="og:title" content={title} key={title} />
         <meta property="og:description" content="Readmal Modern Touch Story Platform, Enjoy it now!" />
-        <meta property="og:image" content="/logo.png" />
+        <meta property="og:image" content={`${BASE_URL}/logo.png`} />
       </Head>
       <Container> 
         <About />

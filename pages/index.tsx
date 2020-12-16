@@ -9,6 +9,7 @@ import { Container, Button } from "@material-ui/core"
 import AuthenticateMiddleware from "../middleware/isAuthenticate"
 import Home from "../src/components/Home/Home"
 import { contextType, makeSampleContexts } from "../model/Context"
+import { BASE_URL } from "../config"
 
 interface HomeInitialProps {
   title: string,
@@ -49,7 +50,7 @@ const IndexPage = ({ title, isAuth } : HomeInitialProps) => {
         <title>{ title }</title>
         <meta property="og:title" content={title} key={title} />
         <meta property="og:description" content="Readmal Modern Touch Story Platform, Enjoy it now!" />
-        <meta property="og:image" content="/logo.png" />
+        <meta property="og:image" content={`${BASE_URL}/logo.png`} />
       </Head>
       <Container> 
         
