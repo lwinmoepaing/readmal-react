@@ -21,7 +21,9 @@ const PrivacyPage = ({ title, isAuth } : PrivacyPageProps) => {
         <title>{title}</title>
         <meta property="og:title" content={title} key={title} />
         <meta property="og:description" content="Readmal Modern Touch Story Platform, Enjoy it now!" />
-        <meta property="og:image" content={`${BASE_URL}/logo.png`} />
+        <meta property="og:image" content={`${BASE_URL}/readmal.png`} />
+        <meta property="og:url" content={`${BASE_URL}/privacy`} />
+        <meta property="og:type" content="article" />
       </Head>
       <Container> 
         <Privacy />

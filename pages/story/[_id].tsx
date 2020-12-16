@@ -8,6 +8,7 @@ import Link from 'next/link'
 
 import { getStoryById } from "../../src/api/story"
 import StoryDetail from "../../src/components/Story/StoryDetail"
+import { BASE_URL } from "../../config"
 
 interface StoryDetailPublicPageProps {
   title: string,
@@ -22,7 +23,7 @@ const StoryDetailPublicPage = ({ title, story, id } : StoryDetailPublicPageProps
         <title>{ title }</title>
         <meta property="og:title" content={title} key={title} />
         <meta property="og:description" content={title} />
-        <meta property="og:image" content={ !!story?.image ? story.image : '/logo.png'} />
+        <meta property="og:image" content={ !!story?.image ? story.image : BASE_URL + '/logo.png'} />
       </Head>
       <Container> 
         { !story &&  <Typography variant="h6" component="h6"> Story is not found </Typography> }
